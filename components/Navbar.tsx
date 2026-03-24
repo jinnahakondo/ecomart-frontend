@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
@@ -38,7 +39,8 @@ export default function Navbar() {
                     </div>
                     <div className="navbar-end gap-6">
                         <Link href={'/'}><FaCartShopping size={24} /></Link>
-                        <Link href={'/'}><FaUser size={24} /></Link>
+                        <Link href={'/login'}
+                        ><FaUser size={24} /></Link>
                     </div>
 
                 </div>
