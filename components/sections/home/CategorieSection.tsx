@@ -1,3 +1,4 @@
+import Title from '@/components/Title'
 import { categories } from '@/lib/category.data'
 import React from 'react'
 
@@ -9,10 +10,7 @@ export default function Categories() {
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h2 className="text-2xl font-bold text-primary">
-                        Explore Categories
-                    </h2>
-
+                    <Title>Explore Categories</Title>
                     <p className="text-sm text-base-content/60">
                         Shop by your favorite product groups
                     </p>

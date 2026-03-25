@@ -1,4 +1,5 @@
 import ProductCard, { Product } from "@/components/cards/ProductCard";
+import Title from "@/components/Title";
 // import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 
@@ -18,10 +19,7 @@ export default async function FeaturedProducts() {
 
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl font-bold text-primary">
-                        Featured Products
-                    </h2>
-
+                    <Title>Featured Products</Title>
                     {/* Slider Buttons */}
                     {/* <div className="flex gap-2">
                         <button className="btn btn-circle btn-ghost">
@@ -36,7 +34,7 @@ export default async function FeaturedProducts() {
 
                 {/* Products Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {products.map((product:Product) => (
+                    {products.map((product: Product) => (
                         <ProductCard
                             key={product?._id}
                             product={product}

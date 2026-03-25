@@ -1,8 +1,5 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { FaCartShopping } from "react-icons/fa6";
 
 export type Product = {
     _id: number;
