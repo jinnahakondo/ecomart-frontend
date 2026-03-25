@@ -1,4 +1,5 @@
 "use client"
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
@@ -17,8 +18,11 @@ export default function LoginPage() {
     } = useForm<Inputs>()
 
     //Login handler 
-    const handleLogin: SubmitHandler<Inputs> = (data) => {
+    const handleLogin: SubmitHandler<Inputs> = async (data) => {
         console.log(data)
+        const res = await signIn("credentials", { email: data?.email, password: data?.password, redirect: false })
+        console.log(res)
+
     }
 
     return (
@@ -55,7 +59,7 @@ export default function LoginPage() {
                 </div>
                 {/* sign up button  */}
                 <button type="submit" className='btn btn-primary mt-4 w-full'>
-                    Sign Up
+                    Log in
                 </button>
             </form>
             {/* google login and other links */}
