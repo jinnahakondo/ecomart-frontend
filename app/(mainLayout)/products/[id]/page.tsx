@@ -1,7 +1,7 @@
 import { Product } from '@/lib/types/product'
 import Image from 'next/image'
 import React from 'react'
-import { FaCartShopping, FaStar } from 'react-icons/fa6'
+import { FaBangladeshiTakaSign, FaCartShopping, FaStar } from 'react-icons/fa6'
 
 type Props = {
     params: { id: string }
@@ -15,10 +15,17 @@ const getProduct = async (id: string) => {
 export default async function ProductDetails({ params }: Props) {
     const { id } = await params;
     const product: Product = await getProduct(id)
-    const finalPrice =
+
+    //price after discount
+    const discountprice =
         product.price -
         (product.price * product.discountPercentage) / 100;
 
+    //price in bdt
+    const finalPrice = discountprice * 100
+
+    //price before discount in bdt
+    const oldPrice = product.price * 100
     return (
         <section className="bg-base-100 py-12">
             <div className="max-w-7xl mx-auto px-2.5">
@@ -56,12 +63,12 @@ export default async function ProductDetails({ params }: Props) {
 
                         {/* Price */}
                         <div className="flex items-center gap-3">
-                            <span className="text-2xl font-bold text-primary">
-                                ${finalPrice.toFixed(2)}
+                            <span className="text-2xl font-bold text-primary flex items-center gap-1">
+                                <FaBangladeshiTakaSign /> {finalPrice.toFixed(0)}
                             </span>
 
-                            <span className="line-through text-base-content/40">
-                                ${product.price}
+                            <span className="line-through text-base-content/40 flex items-center gap-1">
+                                <FaBangladeshiTakaSign /> {oldPrice.toFixed(0)}
                             </span>
 
                             <span className="badge badge-primary">
