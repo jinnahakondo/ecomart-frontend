@@ -17,7 +17,8 @@ export const authOptions = {
 
           //if user not found
           if (!user) {
-            throw new Error("user not found");
+            // throw new Error("user not found");
+            return null;
           }
 
           //checking password
@@ -28,7 +29,8 @@ export const authOptions = {
 
           //if password is not matched
           if (!isPasswordCorrect) {
-            throw new Error("Invalid password");
+            // throw new Error("Invalid password");
+            return null;
           }
 
           // return user info
@@ -39,7 +41,8 @@ export const authOptions = {
             role: user?.role,
           };
         } catch (error) {
-          throw new Error(error?.message);
+          // throw new Error(error?.message);
+          return null;
         }
       },
     }),

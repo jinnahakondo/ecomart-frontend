@@ -9,7 +9,7 @@ export default function Navbar() {
     const links = <>
         <li><NavLink href="/">Home</NavLink></li>
         <li>
-            <NavLink href="/services">Services</NavLink>
+            <NavLink href="/products">Products</NavLink>
         </li>
         <li><NavLink href="/about">About</NavLink></li>
         <li><NavLink href="/contact">Contact</NavLink></li>

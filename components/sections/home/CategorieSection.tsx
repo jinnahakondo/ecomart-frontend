@@ -5,7 +5,7 @@ import React from 'react'
 export default function Categories() {
 
     return (
-        <section>
+        <section className='max-w-7xl mx-auto'>
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
                 <div>
