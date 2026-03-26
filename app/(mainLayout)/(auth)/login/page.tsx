@@ -1,5 +1,4 @@
 "use client"
-import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
@@ -19,10 +18,7 @@ export default function LoginPage() {
 
     //Login handler 
     const handleLogin: SubmitHandler<Inputs> = async (data) => {
-        console.log(data)
-        const res = await signIn("credentials", { email: data?.email, password: data?.password, redirect: false })
-        console.log(res)
-
+        console.log(data)   
     }
 
     return (
