@@ -164,6 +164,8 @@ export default async function ProductDetails({ params }: Props) {
                     </div>
                 </div>
 
+
+
             </div>
         </section>
     )
