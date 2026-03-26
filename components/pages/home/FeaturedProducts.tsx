@@ -4,8 +4,8 @@ import Title from "@/components/Title";
 
 
 
-const getProducts = async () => {
-    const res = await fetch(`${process.env.API}/products?limit=4`)
+export const getProducts = async () => {
+    const res = await fetch(`${process.env.API}/products?limit=5`)
     const data = await res.json();
     return data?.result;
 }
@@ -33,7 +33,7 @@ export default async function FeaturedProducts() {
                 </div>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 ">
                     {products.map((product: Product) => (
                         <ProductCard
                             key={product?._id}

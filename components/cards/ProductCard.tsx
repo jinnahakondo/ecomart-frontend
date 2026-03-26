@@ -15,17 +15,17 @@ export default function ProductCard({ product }: Props) {
     const finalPrice = (product.price - discountPrice) * 100
 
     return (
-        <div className="bg-base-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition">
+        <div className="bg-base-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition flex flex-col h-full group">
 
             {/* Product Image */}
-            <div className="relative rounded-xl overflow-hidden bg-base-200">
+            <div className="relative rounded-xl overflow-hidden bg-base-200 group-hover:scale-110 transition-all duration-200 ">
 
                 <Image
                     src={product?.thumbnail}
                     alt={product.title}
                     width={100}
                     height={100}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-40 object-cover"
                 />
 
                 {/* Badge discount parcentage*/}
@@ -37,19 +37,12 @@ export default function ProductCard({ product }: Props) {
             </div>
 
             {/* Product Info */}
-            <div className="mt-4 space-y-1">
-                {/* category  */}
-                <p className="text-xs text-base-content/60">
-                    {product.category}
-                </p>
+            <div className="mt-4 space-y-1 mb-4">
+               
                 {/* title  */}
-                <h3 className="font-semibold text-base-content">
+                <h3 className="font-semibold text-base-content text-xs">
                     {product.title}
                 </h3>
-                {/* weight  */}
-                <p className="text-sm text-base-content/60">
-                    {product.weight} KG
-                </p>
 
                 {/* Price */}
                 <div className="flex items-center gap-2 mt-2">
@@ -67,10 +60,10 @@ export default function ProductCard({ product }: Props) {
                 </div>
 
                 {/* Add To Cart */}
-                <Link href={`/products/${product?._id}`} className="btn btn-primary w-full mt-3 gap-2">
-                    View Details
-                </Link>
             </div>
+            <Link href={`/products/${product?._id}`} className="btn btn-sm btn-primary rounded-full w-full  gap-2 mt-auto">
+                View Details
+            </Link>
         </div>
     );
 }
