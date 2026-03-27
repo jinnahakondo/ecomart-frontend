@@ -1,9 +1,21 @@
 'use client'
-import Title from '@/components/Title'
 import React from 'react'
+import Title from '@/components/Title'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FiSearch } from 'react-icons/fi'
 
 export default function ProductPageHeader() {
+    const router = useRouter()
+    const params = useSearchParams()
+
+    //handle search
+    const handleSearch = (e) => {
+        const searchText: string = e?.target?.value;
+      
+        const query = new URLSearchParams(params)
+        query.set('search', String(searchText))
+        router.push(`/products?${query.toString()}`)
+    }
     return (
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
@@ -17,6 +29,7 @@ export default function ProductPageHeader() {
                 {/* Search */}
                 <div className="relative">
                     <input
+                        onChange={(e) => handleSearch(e)}
                         type="text"
                         placeholder="Search products..."
                         className="input input-bordered rounded-full pl-10"
