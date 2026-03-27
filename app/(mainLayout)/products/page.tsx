@@ -4,8 +4,8 @@ import ProductFilterSidebar from "@/components/pages/products/ProductFilter"
 import ProductPageHeader from "@/components/pages/products/ProductPageHeader"
 import { Product } from "@/lib/types/product"
 
-const getProducts = async (search: string) => {
-    const res = await fetch(`${process.env.API}/products?search=${search}`)
+const getProducts = async (search: string, category: string) => {
+    const res = await fetch(`${process.env.API}/products?search=${search}&&category=${category}`)
     const data = await res.json();
     return data?.result;
 }
@@ -21,8 +21,9 @@ type Props = {
 export default async function Products({ searchParams }: Props) {
     const params = await searchParams;
     const search = params.search || "";
+    const category = params.category || "";
 
-    const products = await getProducts(search)
+    const products = await getProducts(search,category)
     return (
         <section className="bg-base-200 min-h-screen px-6 md:px-16 lg:px-24 py-10">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

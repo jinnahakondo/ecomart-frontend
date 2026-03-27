@@ -1,8 +1,27 @@
 "use client"
-import React from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 
+const categories = [
+    "all products", "groceries", "furniture", "fragrances", "beauty"
+]
 export default function ProductFilterSidebar() {
+    const params = useSearchParams()
+    const router = useRouter()
+    const [isActive, setIsActive] = useState("all products")
+    // handle category filter 
+    const handleCategory = async (category: string) => {
+        setIsActive(category)
+        const query = new URLSearchParams(params)
+        if (category === 'all products') {
+            query.set("category", "")
+        }
+        else {
+            query.set("category", category)
+        }
+        router.push(`/products?${query.toString()}`)
+    }
     return (
         <aside className="bg-base-100 p-5 rounded-xl h-fit space-y-6">
 
@@ -18,18 +37,15 @@ export default function ProductFilterSidebar() {
             <div>
                 <p className="text-sm font-medium mb-2">Category</p>
                 <ul className="space-y-2 text-sm">
-                    <li className="text-primary font-medium cursor-pointer">
-                        All Products
-                    </li>
-                    <li className="hover:text-primary cursor-pointer">
-                        Fresh Produce
-                    </li>
-                    <li className="hover:text-primary cursor-pointer">
-                        Pantry
-                    </li>
-                    <li className="hover:text-primary cursor-pointer">
-                        Health & Wellness
-                    </li>
+                    {
+                        categories.map((category, i) => <li key={i} className={`${isActive === category ? "text-primary" : "text-base-content/60"} font-medium cursor-pointer`}>
+                            <button
+                                onClick={() => handleCategory(category)}
+                                className='capitalize'>
+                                {category}
+                            </button>
+                        </li>)
+                    }
                 </ul>
             </div>
 
