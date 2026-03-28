@@ -12,22 +12,8 @@ export default function ProductFilterSidebar() {
     // handle sort product 
     const handleSortProduct = async (sortBy: string) => {
         const query = new URLSearchParams(params);
-
-        // sort by top rated products 
-        if (sortBy === "rating_asc") {
-            query.set('sort', sortBy)
-            router.push(`/products?${query.toString()}`)
-        }
-        // sort by price low to high 
-        else if (sortBy === "price_asc") {
-            query.set('sort', sortBy)
-            router.push(`/products?${query.toString()}`)
-        }
-        // sort by price high to low
-        else {
-            query.set('sort', sortBy)
-            router.push(`/products?${query.toString()}`)
-        }
+        query.set('sort', sortBy)
+        router.push(`/products?${query.toString()}`)
     }
 
     // handle category filter 
@@ -67,10 +53,10 @@ export default function ProductFilterSidebar() {
                 <p className="text-sm font-medium mb-2">Category</p>
                 <ul className="space-y-2 text-sm">
                     {
-                        categoryData.map((category: string, i) => <li key={i} className={`${isActive === category ? "text-primary" : "text-base-content/60"} font-medium cursor-pointer`}>
+                        categoryData.map((category: string, i) => <li key={i} className={`${isActive === category ? "text-primary" : "text-base-content/60"} font-medium cursor-pointer w-full`}>
                             <button
                                 onClick={() => handleCategory(category)}
-                                className='capitalize'>
+                                className='capitalize w-full text-left'>
                                 {category}
                             </button>
                         </li>)
