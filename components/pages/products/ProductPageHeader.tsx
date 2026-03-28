@@ -4,16 +4,19 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { FiSearch } from 'react-icons/fi'
 
 export default function ProductPageHeader() {
-    
+
     const router = useRouter()
     const params = useSearchParams()
 
     //handle search
-    const handleSearch = (e) => {
-        const searchText: string = e?.target?.value;
-
+    const handleSearch = (searchText: string) => {
         const query = new URLSearchParams(params)
-        query.set('search', String(searchText))
+        if (!searchText) {
+            query.delete("search")
+        }
+        else {
+            query.set('search', String(searchText))
+        }
         router.push(`/products?${query.toString()}`)
     }
     return (
@@ -29,7 +32,7 @@ export default function ProductPageHeader() {
                 {/* Search */}
                 <div className="relative">
                     <input
-                        onChange={(e) => handleSearch(e)}
+                        onChange={(e) => handleSearch(e.target.value)}
                         type="text"
                         placeholder="Search products..."
                         className="input input-bordered rounded-full pl-10"
