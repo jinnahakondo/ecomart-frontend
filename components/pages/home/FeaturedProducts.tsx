@@ -1,4 +1,4 @@
-import ProductCard, { Product } from "@/components/cards/ProductCard";
+import ProductCard from "@/components/cards/ProductCard";
 import Title from "@/components/Title";
 // import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
