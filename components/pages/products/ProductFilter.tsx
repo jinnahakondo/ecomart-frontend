@@ -26,7 +26,7 @@ export default function ProductFilterSidebar() {
         setIsActive(category)
         const query = new URLSearchParams(params)
         if (category === 'all products') {
-            query.set("category", "")
+            query.delete("category")
         }
         else {
             query.set("category", category)
