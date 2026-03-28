@@ -18,11 +18,20 @@ export default function RegisterPage() {
     } = useForm<Inputs>()
 
     //Login handler 
-    const handleRegister: SubmitHandler<Inputs> = (data) => {
-        console.log(data)
+    const handleRegister: SubmitHandler<Inputs> = async (data) => {
+        const uri = `${process.env.NEXT_PUBLIC_API}/auth/register`
+        const res = await fetch(uri, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+        const user = await res.json()
+        console.log(user)
     }
     return (
-       <div className='max-w-96 mt-20 bg-base-100 border p-2.5 border-base-300 rounded-2xl mx-auto'>
+        <div className='max-w-96 mt-20 bg-base-100 border p-2.5 border-base-300 rounded-2xl mx-auto'>
             <form onSubmit={handleSubmit(handleRegister)}>
                 <div className='flex flex-col gap-4'>
                     {/* name  */}

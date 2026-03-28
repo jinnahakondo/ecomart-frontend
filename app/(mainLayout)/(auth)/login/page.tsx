@@ -5,7 +5,6 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { FaGoogle } from 'react-icons/fa6'
 
 interface Inputs {
-    name: string,
     email: string,
     password: string,
 }
@@ -18,7 +17,17 @@ export default function LoginPage() {
 
     //Login handler 
     const handleLogin: SubmitHandler<Inputs> = async (data) => {
-        console.log(data)   
+        const url = `${process.env.NEXT_PUBLIC_API}/auth/login`
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+        })
+        const user = await res.json()
+        console.log(user)
     }
 
     return (
