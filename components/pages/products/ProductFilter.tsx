@@ -12,7 +12,12 @@ export default function ProductFilterSidebar() {
     // handle sort product 
     const handleSortProduct = async (sortBy: string) => {
         const query = new URLSearchParams(params);
-        query.set('sort', sortBy)
+        if (!sortBy) {
+            query.delete('sort')
+        }
+        else {
+            query.set('sort', sortBy)
+        }
         router.push(`/products?${query.toString()}`)
     }
 
