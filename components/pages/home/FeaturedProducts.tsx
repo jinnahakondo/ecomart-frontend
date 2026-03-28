@@ -4,14 +4,14 @@ import Title from "@/components/Title";
 
 
 
-export const getProducts = async () => {
-    const res = await fetch(`${process.env.API}/products?limit=5`)
+export const getProducts = async (limit: number) => {
+    const res = await fetch(`${process.env.API}/products?limit=${limit}`)
     const data = await res.json();
     return data?.result;
 }
 
 export default async function FeaturedProducts() {
-    const products = await getProducts();
+    const products = await getProducts(5);
 
     return (
         <section className="bg-base-200 py-12">

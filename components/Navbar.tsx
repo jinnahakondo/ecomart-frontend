@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import NavLink from "./NavLink/NavLink";
-import { signIn } from "next-auth/react";
+
 
 export default function Navbar() {
     const links = <>

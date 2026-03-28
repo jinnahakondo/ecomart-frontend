@@ -5,7 +5,7 @@ import { getProducts } from './FeaturedProducts'
 import ProductCard from '@/components/cards/ProductCard'
 
 export default async function LatestProducts() {
-    const products = await getProducts()
+    const products = await getProducts(5)
     return (
         <div>
             <div className='max-w-7xl mx-auto px-2.5'>

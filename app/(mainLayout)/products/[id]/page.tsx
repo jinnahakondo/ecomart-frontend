@@ -103,9 +103,13 @@ export default async function ProductDetails({ params }: Props) {
 
                 {/* Reviews Section */}
                 <div className="mt-14">
-                    <h2 className="text-xl font-semibold mb-6">
-                        Customer Reviews
-                    </h2>
+                    <div className='flex items-center justify-between mb-4'>
+                        <h2 className="text-xl font-semibold mb-6">
+                            Customer Reviews
+                        </h2>
+                        {/* give review button  */}
+                        <button className='btn btn-primary'>Give A Review</button>
+                    </div>
 
                     <div className="space-y-4">
                         {product.reviews.map((review) => (
