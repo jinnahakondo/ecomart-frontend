@@ -15,17 +15,17 @@ export default function ProductFilterSidebar() {
 
         // sort by top rated products 
         if (sortBy === "rating_asc") {
-            query.set('rating', sortBy)
+            query.set('sort', sortBy)
             router.push(`/products?${query.toString()}`)
         }
         // sort by price low to high 
         else if (sortBy === "price_asc") {
-            query.set('price', sortBy)
+            query.set('sort', sortBy)
             router.push(`/products?${query.toString()}`)
         }
         // sort by price high to low
         else {
-            query.set('price', sortBy)
+            query.set('sort', sortBy)
             router.push(`/products?${query.toString()}`)
         }
     }
