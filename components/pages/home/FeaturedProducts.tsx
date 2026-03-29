@@ -1,13 +1,18 @@
 import ProductCard from "@/components/cards/ProductCard";
 import Title from "@/components/Title";
+import { Product } from "@/lib/types/product";
 // import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 
 
 export const getProducts = async (limit: number) => {
-    const res = await fetch(`${process.env.API}/products?limit=${limit}`)
-    const data = await res.json();
-    return data?.result;
+    try {
+        const res = await fetch(`${process.env.API}/products?limit=${limit}`)
+        const data = await res.json();
+        return data?.result;
+    } catch (error) {
+        throw new Error("Failed to fetch products");
+    }
 }
 
 export default async function FeaturedProducts() {
