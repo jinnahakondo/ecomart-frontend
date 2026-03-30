@@ -1,11 +1,23 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import NavLink from "./NavLink/NavLink";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
 
 
 export default function Navbar() {
+    const [user, setUser] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/api/auth/me`, {
+            credentials: "include"
+        }).then(res => res.json())
+            .then(data => setUser(data.user))
+    }, [])
+
     const links = <>
         <li><NavLink href="/">Home</NavLink></li>
         <li>
@@ -14,8 +26,24 @@ export default function Navbar() {
         <li><NavLink href="/about">About</NavLink></li>
         <li><NavLink href="/contact">Contact</NavLink></li>
         <li><NavLink href="/blog">Blog</NavLink></li>
-        <li><NavLink href="/dashboard">Dashboard</NavLink></li>
+        {user && <li><NavLink href="/dashboard">Dashboard</NavLink></li>}
     </>
+
+    //logout handler
+    const handleLogout = async () => {
+        {
+            const res = await fetch(`http://localhost:5000/api/auth/logout`, {
+                method: "POST",
+                credentials: "include"
+            })
+            const result = await res.json()
+            if (result.success) {
+                setUser(null)
+            }
+        }
+    }
+
+
     return (
         <div>
             <div className=" bg-base-100 shadow-sm">
@@ -40,29 +68,22 @@ export default function Navbar() {
                     </div>
                     <div className="navbar-end gap-6">
                         <Link href={'/'}><FaCartShopping size={24} /></Link>
-                        <Link href={'/login'}
-                        ><FaUser size={24} /></Link>
+                        {
+                            user ?
+                                // <div>
+                                //     <Image src={user?.avatar} alt="user image" width={50} height={50} />
+                                // </div>
+                                <button className="btn btn-ghost" onClick={() => handleLogout()}>
+                                    Logout
+                                </button>
+                                :
+                                <Link href={'/login'}
+                                ><FaUser size={24} /></Link>
+                        }
                     </div>
 
                 </div>
-                {/* search bar  */}
-                {/* <div className="max-w-7xl mx-auto w-full px-2 pb-4 lg:hidden">
-                    <label className="input w-full">
-                        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <g
-                                strokeLinejoin="round"
-                                strokeLinecap="round"
-                                strokeWidth="2.5"
-                                fill="none"
-                                stroke="currentColor"
-                            >
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.3-4.3"></path>
-                            </g>
-                        </svg>
-                        <input type="search" required placeholder="Search " />
-                    </label>
-                </div> */}
+
             </div>
         </div>
     )

@@ -1,5 +1,7 @@
 "use client"
+import { loginUser } from '@/lib/action'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FaGoogle } from 'react-icons/fa6'
@@ -15,19 +17,26 @@ export default function LoginPage() {
         formState: { errors },
     } = useForm<Inputs>()
 
+    const router = useRouter()
     //Login handler 
     const handleLogin: SubmitHandler<Inputs> = async (data) => {
-        const url = `${process.env.NEXT_PUBLIC_API}/auth/login`
-        const res = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(data)
-        })
-        const user = await res.json()
-        console.log(user)
+        try {
+            const res = await fetch(`http://localhost:5000/api/auth/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data),
+                credentials: "include"
+            })
+            const result = await res.json()
+            if (result.success) {
+                router.push("/")
+            }
+
+        } catch (error) {
+            throw new Error("Failed to login")
+        }
     }
 
     return (
