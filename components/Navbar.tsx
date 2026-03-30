@@ -12,7 +12,7 @@ export default function Navbar() {
     const [user, setUser] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API}/auth/me`, {
+        fetch(`http://localhost:5000/api/auth/me`, {
             credentials: "include"
         }).then(res => res.json())
             .then(data => setUser(data.user))
