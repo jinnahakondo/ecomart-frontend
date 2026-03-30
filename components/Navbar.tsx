@@ -12,7 +12,7 @@ export default function Navbar() {
     const [user, setUser] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/auth/me`, {
+        fetch(`${process.env.NEXT_PUBLIC_API}/auth/me`, {
             credentials: "include"
         }).then(res => res.json())
             .then(data => setUser(data.user))
@@ -32,7 +32,7 @@ export default function Navbar() {
     //logout handler
     const handleLogout = async () => {
         {
-            const res = await fetch(`http://localhost:5000/api/auth/logout`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/logout`, {
                 method: "POST",
                 credentials: "include"
             })

@@ -19,7 +19,7 @@ export default function RegisterPage() {
 
     //Login handler 
     const handleRegister: SubmitHandler<Inputs> = async (data) => {
-        const uri = `http://localhost:5000/api/auth/register`
+        const uri = `${process.env.NEXT_PUBLIC_API}/auth/register`
         const res = await fetch(uri, {
             method: "POST",
             headers: {
