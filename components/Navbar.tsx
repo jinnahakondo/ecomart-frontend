@@ -83,11 +83,7 @@ export default function Navbar() {
                     </div>
 
                 </div>
-<<<<<<< HEAD
             
-=======
-
->>>>>>> mini
             </div>
         </div>
     )
