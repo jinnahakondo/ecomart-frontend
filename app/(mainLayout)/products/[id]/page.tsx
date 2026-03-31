@@ -1,3 +1,4 @@
+import OrderNowBtn from '@/components/buttons/OrderNowBtn'
 import OrderNow from '@/components/pages/products/OrderNow'
 import ReviewSection from '@/components/pages/products/ReviewSection'
 import { Product } from '@/lib/types/product'
@@ -96,7 +97,7 @@ export default async function ProductDetails({ params }: Props) {
                         </div>
 
                         {/* Order Now button */}
-                        <OrderNow />
+                        <OrderNowBtn productId={product._id} />
                     </div>
                 </div>
 
