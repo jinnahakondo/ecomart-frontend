@@ -1,11 +1,17 @@
 "use client"
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type User = {
+export type User = {
   _id: string;
   name: string;
   email: string;
+  password: string;
   avatar: string;
+  role: "user" | "admin";
+  provider: "credentials" | "google";
+  createdAt: string;
+  updatedAt: string;
+
 };
 
 type AuthContextType = {

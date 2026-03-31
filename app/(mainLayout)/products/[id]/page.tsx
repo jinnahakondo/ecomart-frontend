@@ -1,3 +1,5 @@
+import GiveAReviewBtn from '@/components/buttons/GiveAReviewBtn'
+import ReviewSection from '@/components/pages/products/ReviewSection'
 import { Product } from '@/lib/types/product'
 import Image from 'next/image'
 import React from 'react'
@@ -103,73 +105,7 @@ export default async function ProductDetails({ params }: Props) {
                 </div>
 
                 {/* Reviews Section */}
-                <div className="mt-14">
-                    <div className='flex items-center justify-between mb-4'>
-                        <h2 className="text-xl font-semibold mb-6">
-                            Customer Reviews
-                        </h2>
-                        {/* give review button  */}
-                        <button className='btn btn-primary'>Give A Review</button>
-                    </div>
-
-                    <div className="space-y-4">
-                        {product.reviews.map((review) => (
-                            <div
-                                key={review._id}
-                                className="bg-base-200 p-5 rounded-xl"
-                            >
-
-                                {/* User Info */}
-                                <div className="flex items-start justify-between ">
-
-                                    <div className="flex items-center gap-3">
-
-                                        {/* Avatar */}
-                                        <div className="avatar bg-base-100 border rounded-full overflow-hidden">
-                                            <div className="w-10 rounded-full">
-                                                {/* <Image
-                                                    width={100}
-                                                    height={100}
-                                                    src={''}
-                                                    }
-
-                                                alt={review.reviewerName}
-                                                /> */}
-                                            </div>
-                                        </div>
-
-                                        {/* Name + Date */}
-                                        <div>
-                                            <h4 className="font-medium text-base-content">
-                                                {review.reviewerName}
-                                            </h4>
-
-                                            {/* <p className="text-xs text-base-content/60">
-                {formatDate(review.date)}
-              </p> */}
-                                        </div>
-
-                                    </div>
-
-                                    {/* Rating */}
-                                    <span className="flex items-center gap-1 text-primary">
-                                        <FaStar />
-                                        {review.rating}
-                                    </span>
-
-                                </div>
-
-                                {/* Comment */}
-                                <p className="text-base-content/80 mt-4 leading-relaxed">
-                                    {review.comment}
-                                </p>
-
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-
+                <ReviewSection product={product} />
 
             </div>
         </section>
