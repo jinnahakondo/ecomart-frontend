@@ -1,4 +1,3 @@
-import GiveAReviewBtn from '@/components/buttons/GiveAReviewBtn'
 import ReviewSection from '@/components/pages/products/ReviewSection'
 import { Product } from '@/lib/types/product'
 import Image from 'next/image'
