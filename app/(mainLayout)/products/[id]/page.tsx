@@ -1,3 +1,4 @@
+import OrderNow from '@/components/pages/products/OrderNow'
 import ReviewSection from '@/components/pages/products/ReviewSection'
 import { Product } from '@/lib/types/product'
 import Image from 'next/image'
@@ -94,12 +95,8 @@ export default async function ProductDetails({ params }: Props) {
                             <p>Weight: {product.weight}g</p>
                         </div>
 
-                        {/* Add To Cart */}
-                        <button className="btn btn-primary gap-2 mt-4">
-                            <FaCartShopping />
-                            Add to Cart
-                        </button>
-
+                        {/* Order Now button */}
+                        <OrderNow />
                     </div>
                 </div>
 
