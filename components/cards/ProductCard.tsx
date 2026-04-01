@@ -8,12 +8,6 @@ type Props = {
 
 export default function ProductCard({ product }: Props) {
 
-    // calculate discountPrice 
-    const discountPrice = (product.price / 100) * product.discountPercentage
-
-    // calculate finalPrice and convert into bdt 
-    const finalPrice = (product.price - discountPrice) * 100
-
     return (
         <div className="bg-base-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition flex flex-col h-full group">
 
@@ -48,13 +42,13 @@ export default function ProductCard({ product }: Props) {
                 <div className="flex items-center gap-2 mt-2">
                     {/* price after discount */}
                     <span className="font-semibold text-primary">
-                        BDT {finalPrice.toFixed(0)}
+                        BDT {product?.price.toFixed(0)}
                     </span>
 
                     {/* old price  */}
                     {product.price && (
                         <span className="text-sm line-through text-base-content/40">
-                            BDT {(product.price * 100).toFixed(0)}
+                            BDT {product?.oldPrice.toFixed(0)}
                         </span>
                     )}
                 </div>

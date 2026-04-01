@@ -20,16 +20,7 @@ export default async function ProductDetails({ params }: Props) {
 
     const product: Product = await getProduct(id)
 
-    //price after discount
-    const discountprice =
-        product.price -
-        (product.price * product.discountPercentage) / 100;
 
-    //price in bdt
-    const finalPrice = discountprice * 100
-
-    //price before discount in bdt
-    const oldPrice = product.price * 100
     return (
         <section className="bg-base-100 py-12">
             <div className="max-w-7xl mx-auto px-2.5">
@@ -68,11 +59,11 @@ export default async function ProductDetails({ params }: Props) {
                         {/* Price */}
                         <div className="flex items-center gap-3">
                             <span className="text-2xl font-bold text-primary flex items-center gap-1">
-                                <FaBangladeshiTakaSign /> {finalPrice.toFixed(0)}
+                                <FaBangladeshiTakaSign /> {product?.price.toFixed(0)}
                             </span>
 
                             <span className="line-through text-base-content/40 flex items-center gap-1">
-                                <FaBangladeshiTakaSign /> {oldPrice.toFixed(0)}
+                                <FaBangladeshiTakaSign /> {product?.oldPrice.toFixed(0)}
                             </span>
 
                             <span className="badge badge-primary">
