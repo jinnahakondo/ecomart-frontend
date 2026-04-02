@@ -1,5 +1,6 @@
 "use client";
 
+import NavLink from "@/components/NavLink/NavLink";
 import Link from "next/link";
 import React from "react";
 import {
@@ -15,7 +16,7 @@ export default function DashboardSidebar() {
   return (
     <aside className="w-full max-w-72 bg-base-200 min-h-screen p-4 pt-0 ">
       {/* Profile Card */}
-      <div className="card p-4 rounded-xl">
+      <div className="card rounded-xl">
         <div className="flex items-center gap-3">
           {/* Avatar */}
           <div className="avatar placeholder">
@@ -32,29 +33,28 @@ export default function DashboardSidebar() {
         </div>
 
         {/* Menu */}
-        <ul className="menu mt-4 gap-1">
+        <ul className="menu mt-4 gap-1 dashboard  w-full ">
           <li>
-            <Link href="/profile">
+            <NavLink href="/dashboard/my-profile">
               <FaUser size={16} />
               My Profile
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link
-              href="/orders"
-              className="active bg-base-300 font-medium"
+            <NavLink
+              href="/dashboard/my-orders"
             >
               <FaBox size={16} />
               My Orders
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link href="/reviews">
+            <NavLink href="/dashboard/my-reviews">
               <FaStar size={16} />
               My Reviews
-            </Link>
+            </NavLink>
           </li>
 
           <li>
