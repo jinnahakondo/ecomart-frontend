@@ -115,7 +115,7 @@ export default function Navbar() {
 
                         <ul
                             tabIndex={-1}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow main-navbar"
                         >
                             {navLinks}
                         </ul>
@@ -131,7 +131,7 @@ export default function Navbar() {
 
                 {/* desktop menu */}
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal">
+                    <ul className="menu menu-horizontal main-navbar">
                         {navLinks}
                     </ul>
                 </div>

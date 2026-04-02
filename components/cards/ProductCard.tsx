@@ -25,14 +25,14 @@ export default function ProductCard({ product }: Props) {
                 {/* Badge discount parcentage*/}
 
                 <span className="absolute top-3 left-3 badge badge-primary text-primary-content">
-                    {(product.discountPercentage).toFixed(0)}% OFF
+                    {Math.round(product.discountPercentage)}% OFF
                 </span>
 
             </div>
 
             {/* Product Info */}
             <div className="mt-4 space-y-1 mb-4">
-               
+
                 {/* title  */}
                 <h3 className="font-semibold text-base-content text-xs">
                     {product.title}
@@ -42,13 +42,13 @@ export default function ProductCard({ product }: Props) {
                 <div className="flex items-center gap-2 mt-2">
                     {/* price after discount */}
                     <span className="font-semibold text-primary">
-                        BDT {product?.price.toFixed(0)}
+                        BDT {Math.round(product?.price)}
                     </span>
 
                     {/* old price  */}
                     {product.price && (
                         <span className="text-sm line-through text-base-content/40">
-                            BDT {product?.oldPrice.toFixed(0)}
+                            BDT {Math.round(product?.oldPrice)}
                         </span>
                     )}
                 </div>

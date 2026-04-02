@@ -55,7 +55,7 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
                   <div className="w-10 rounded-full">
                     <Image
                       alt={review.reviewerName}
-                      src={review.avatar}
+                      src={review?.avatar || ''}
                       width={40}
                       height={40}
                       className="object-cover"

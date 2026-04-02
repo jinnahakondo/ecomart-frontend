@@ -12,7 +12,7 @@ export default function NavLink({ children, href }: props) {
     const pathName: string | null = usePathname();
 
     return (
-        <Link href={href} className={`${pathName.endsWith(href) && "text-primary border-b-4 border-primary font-medium "}`}>
+        <Link href={href} className={`${pathName.endsWith(href) && "active"}`}>
             {children}
         </Link>
     )

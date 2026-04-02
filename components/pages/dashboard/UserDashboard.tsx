@@ -1,7 +1,10 @@
 import React from 'react'
 
-export default function UserDashboard() {
+export default function UserDashboard({ content }: { content: React.ReactNode }) {
   return (
-    <div>UserDashboard</div>
+    <div>
+      <h2>User dashboard</h2>
+      {content}
+    </div>
   )
 }

@@ -1,10 +1,10 @@
 import OrderNowBtn from '@/components/buttons/OrderNowBtn'
-import OrderNow from '@/components/pages/products/OrderNow'
+
 import ReviewSection from '@/components/pages/products/ReviewSection'
 import { Product } from '@/lib/types/product'
 import Image from 'next/image'
 import React from 'react'
-import { FaBangladeshiTakaSign, FaCartShopping, FaStar } from 'react-icons/fa6'
+import { FaBangladeshiTakaSign, FaStar } from 'react-icons/fa6'
 
 type Props = {
     params: { id: string }
@@ -67,7 +67,7 @@ export default async function ProductDetails({ params }: Props) {
                             </span>
 
                             <span className="badge badge-primary">
-                                {product.discountPercentage.toFixed(0)}% OFF
+                                {Math.round(product.discountPercentage)}% OFF
                             </span>
                         </div>
 

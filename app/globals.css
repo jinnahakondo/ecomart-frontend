@@ -18,3 +18,7 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: hsl(var(--bc));
   transition: background-color 9999s ease-in-out 0s;
 }
+
+.main-navbar a.active {
+  @apply text-primary border-b-4 border-primary font-medium;
+}

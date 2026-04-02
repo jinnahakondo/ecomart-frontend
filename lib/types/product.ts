@@ -6,7 +6,7 @@ export type Review = {
   rating: number;
   comment: string;
   reviewerName: string;
-  avter?: string;
+  avatar?: string;
   date: string;
 };
 

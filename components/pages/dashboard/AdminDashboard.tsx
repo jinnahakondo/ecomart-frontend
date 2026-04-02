@@ -1,7 +1,12 @@
 import React from 'react'
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ content }: { content: React.ReactNode }) {
   return (
-    <div>AdminDashboard</div>
+    <div>
+      <h2>
+        AdminDashboard
+      </h2>
+      {content}
+    </div>
   )
 }
