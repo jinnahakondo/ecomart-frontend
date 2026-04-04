@@ -5,14 +5,15 @@ import React from 'react'
 
 interface props {
     children: React.ReactNode,
-    href: string
+    href: string,
+    className?: string
 }
 
-export default function NavLink({ children, href }: props) {
+export default function NavLink({ children, href, className }: props) {
     const pathName: string | null = usePathname();
 
     return (
-        <Link href={href} className={`${pathName.endsWith(href) && "active"}`}>
+        <Link href={href} className={`${className} ${pathName.endsWith(href) && "active"}`}>
             {children}
         </Link>
     )

@@ -30,6 +30,8 @@ export default function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  console.log(user)
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -42,9 +44,10 @@ export default function AuthProvider({
         );
 
         const result = await res.json();
+        console.log("result form auth provider", result)
 
         if (res.ok) {
-          setUser(result.user);
+          setUser(result.data);
         } else {
           setUser(null);
         }
@@ -67,10 +70,8 @@ export default function AuthProvider({
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-
   if (!context) {
     throw new Error("useAuth must be used inside AuthProvider");
   }
-
   return context;
 };

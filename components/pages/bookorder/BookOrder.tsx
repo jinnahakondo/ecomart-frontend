@@ -55,7 +55,7 @@ export default function BookOrder() {
           `${process.env.NEXT_PUBLIC_API}/products/${productId}`
         );
         const data = await res.json();
-        setProductInfo(data.result);
+        setProductInfo(data.data);
       } catch (err) {
         console.error("Product fetch failed", err);
       } finally {

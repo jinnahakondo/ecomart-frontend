@@ -9,7 +9,7 @@ export const getProducts = async (limit: number) => {
     try {
         const res = await fetch(`${process.env.API}/products?limit=${limit}`)
         const data = await res.json();
-        return data?.result;
+        return data.data;
     } catch (error) {
         throw new Error("Failed to fetch products");
     }

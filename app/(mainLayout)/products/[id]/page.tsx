@@ -13,7 +13,7 @@ type Props = {
 const getProduct = async (id: string) => {
     const res = await fetch(`${process.env.API}/products/${id}`)
     const data = await res.json();
-    return data?.result
+    return data.data
 }
 export default async function ProductDetails({ params }: Props) {
     const { id } = await params;
