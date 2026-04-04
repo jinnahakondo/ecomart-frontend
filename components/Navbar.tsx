@@ -43,7 +43,7 @@ export default function Navbar() {
 
             {user && (
                 <li>
-                    <NavLink href="/dashboard">Dashboard</NavLink>
+                    <NavLink href={`/dashboard${user?.role === "admin" && "/admin" || user?.role === "user" && "/user"}`}>Dashboard</NavLink>
                 </li>
             )}
         </>

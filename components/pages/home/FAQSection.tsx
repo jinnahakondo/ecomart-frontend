@@ -1,4 +1,4 @@
-import Title from "@/components/Title";
+import SectionHeader from "@/components/SectionHeader";
 
 export default function FAQSection() {
     return (
@@ -7,8 +7,9 @@ export default function FAQSection() {
 
                 {/* Title */}
                 <div className="text-center mb-10">
-                    <Title>Frequently Asked Questions</Title>
                 </div>
+                <SectionHeader title="Frequently Asked Questions"  />
+                <div className="flex justify-between items-center mb-8"></div>
 
                 {/* FAQ Items */}
                 <div className="space-y-4">

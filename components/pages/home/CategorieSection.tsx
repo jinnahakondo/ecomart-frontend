@@ -1,3 +1,4 @@
+import SectionHeader from '@/components/SectionHeader'
 import Title from '@/components/Title'
 import { categories } from '@/lib/category.data'
 import React from 'react'
@@ -8,17 +9,16 @@ export default function Categories() {
     return (
         <section className='max-w-7xl mx-auto'>
             {/* Header */}
-            <div className="flex justify-between items-center mb-8">
-                <div>
-                    <Title>Explore Categories</Title>
-                    <p className="text-sm text-base-content/60">
-                        Shop by your favorite product groups
-                    </p>
+            <div className='pt-24'>
+                <SectionHeader title="Explore Categories" subtitle="  Shop by your favorite product groups" />
+                <div className="flex justify-between items-center mb-8">
                 </div>
 
-                <button className="text-primary font-medium hover:underline">
-                    View All +
-                </button>
+                <div className='flex justify-end'>
+                    <button className="text-primary font-medium hover:underline">
+                        View All +
+                    </button>
+                </div>
             </div>
 
             {/* Categories Grid */}
