@@ -9,6 +9,8 @@ import {
 import { MdOutlineDashboard } from "react-icons/md";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { FaRegUser, FaRegStar } from "react-icons/fa";
+import { LuUsers } from "react-icons/lu";
+import { MdOutlineInventory2 } from "react-icons/md";
 
 
 export default function DashboardLayout({
@@ -23,18 +25,40 @@ export default function DashboardLayout({
 
     //dashbaord nav links
     const links = <>
-        <li className="w-full">
-            <NavLink href={`/dashboard/${user?.role === "user" && "user" || user?.role === "admin" && "admin"}`} >
-                <MdOutlineDashboard size={22} />
-                Dashboard
-            </NavLink>
-        </li>
         {/* user links */}
-        <li><NavLink href="/dashboard/user/my-order"><HiOutlineShoppingCart size={22} />My Orders</NavLink></li>
+        {user?.role === "user" &&
+            <>
+                <li className="w-full">
+                    <NavLink href={'/dashboard/user'} >
+                        <MdOutlineDashboard size={22} />
+                        Dashboard
+                    </NavLink>
+                </li>
+                <li><NavLink href="/dashboard/user/my-order"><HiOutlineShoppingCart size={22} />My Orders</NavLink></li>
 
-        <li><NavLink href="/dashboard/user/my-profile"><FaRegUser size={22} />My Profile</NavLink></li>
+                <li><NavLink href="/dashboard/user/my-profile"><FaRegUser size={22} />My Profile</NavLink></li>
 
-        <li><NavLink href="/dashboard/user/my-reviews"><FaRegStar size={22} />My Reviews</NavLink></li>
+                <li><NavLink href="/dashboard/user/my-reviews"><FaRegStar size={22} />My Reviews</NavLink></li>
+            </>
+        }
+        {/* admin links */}
+        ${user?.role === 'admin' &&
+            <>
+                <li className="w-full">
+                    <NavLink href={'/dashboard/admin'} >
+                        <MdOutlineDashboard size={22} />
+                        Dashboard
+                    </NavLink>
+                </li>
+                <li><NavLink href="/dashboard/admin/manage-orders"><HiOutlineShoppingCart size={22} />Manage Orders</NavLink></li>
+
+                <li><NavLink href="/dashboard/admin/manage-products"><MdOutlineInventory2 size={22} />Manage Products</NavLink></li>
+
+                <li><NavLink href="/dashboard/admin/manage-users"><LuUsers size={22} />Manage Users</NavLink></li>
+
+                <li><NavLink href="/dashboard/admin/my-profile"><FaRegUser size={22} />My Profile</NavLink></li>
+            </>
+        }
 
         <li>
             <a>

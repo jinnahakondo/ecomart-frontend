@@ -1,4 +1,5 @@
 "use client"
+import { useAuth } from '@/lib/context/AuthProvider'
 import Link from 'next/link'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
@@ -11,6 +12,7 @@ interface Inputs {
 }
 
 export default function RegisterPage() {
+    const { setUser } = useAuth()
     const {
         register,
         handleSubmit,
@@ -20,6 +22,7 @@ export default function RegisterPage() {
     //Login handler 
     const handleRegister: SubmitHandler<Inputs> = async (data) => {
         const uri = `${process.env.NEXT_PUBLIC_API}/auth/register`
+        // const uri = `http://localhost:5000/api/auth/register`
         const res = await fetch(uri, {
             method: "POST",
             headers: {
@@ -28,7 +31,8 @@ export default function RegisterPage() {
             body: JSON.stringify(data)
         })
         const user = await res.json()
-        console.log(user)
+        setUser(user.data)
+
     }
     return (
         <div className='max-w-96 mt-20 bg-base-100 border p-2.5 border-base-300 rounded-2xl mx-auto'>
