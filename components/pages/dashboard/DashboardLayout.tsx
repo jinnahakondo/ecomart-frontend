@@ -1,4 +1,5 @@
 "use client"
+import LoadingScreen from "@/components/LoadingScreen";
 import NavLink from "@/components/NavLink/NavLink";
 import { useAuth } from "@/lib/context/AuthProvider";
 import React from "react";
@@ -20,7 +21,7 @@ export default function DashboardLayout({
 }) {
     const { user, loading } = useAuth()
     if (loading) {
-        return "loading...."
+        return <LoadingScreen />
     }
 
     //dashbaord nav links

@@ -123,9 +123,16 @@ export default function Navbar() {
 
                     <Link
                         href="/"
-                        className="btn btn-ghost text-xl text-primary pl-0"
+                        className="btn btn-ghost gap-3 text-primary pl-0 normal-case"
                     >
-                        Ecomart
+                        <Image
+                            src="/logo.svg"
+                            alt="Ecomart logo"
+                            width={36}
+                            height={36}
+                            className="rounded-full"
+                        />
+                        <span className="text-xl font-semibold">Ecomart</span>
                     </Link>
                 </div>
 
