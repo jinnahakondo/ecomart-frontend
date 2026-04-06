@@ -35,7 +35,7 @@ export default function DashboardLayout({
                         Dashboard
                     </NavLink>
                 </li>
-                <li><NavLink href="/dashboard/user/my-order"><HiOutlineShoppingCart size={22} />My Orders</NavLink></li>
+                <li><NavLink href="/dashboard/user/my-orders"><HiOutlineShoppingCart size={22} />My Orders</NavLink></li>
 
                 <li><NavLink href="/dashboard/user/my-profile"><FaRegUser size={22} />My Profile</NavLink></li>
 
