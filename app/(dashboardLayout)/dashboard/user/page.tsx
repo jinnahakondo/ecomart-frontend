@@ -1,7 +1,10 @@
+import UserDashboardOverview from '@/components/pages/dashboard/UserDashboardOverview'
 import React from 'react'
 
 export default function UserDashboard() {
     return (
-        <div>UserDashboard</div>
+        <div>
+            <UserDashboardOverview />
+        </div>
     )
 }
