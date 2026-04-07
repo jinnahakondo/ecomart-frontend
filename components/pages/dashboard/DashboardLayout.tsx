@@ -12,6 +12,7 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import { FaRegUser, FaRegStar } from "react-icons/fa";
 import { LuUsers } from "react-icons/lu";
 import { MdOutlineInventory2 } from "react-icons/md";
+import Link from "next/link";
 
 
 export default function DashboardLayout({
@@ -107,7 +108,7 @@ export default function DashboardLayout({
 
                         {/* logo / title */}
                         <div className="p-5 font-semibold text-xl">
-                            <h2 className="font-bold text-xl"><span className="text-primary">Eco</span>Mart</h2>
+                            <h2 className="font-bold text-xl"><Link href={'/'} className="text-primary">Eco</Link>Mart</h2>
                         </div>
 
                         {/* menu */}
