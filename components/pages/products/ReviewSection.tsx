@@ -2,7 +2,7 @@
 
 import GiveAReviewBtn from "@/components/buttons/GiveAReviewBtn";
 import ReviewModal from "@/components/modal/ReviewModal";
-import { useAuth } from "@/lib/context/AuthProvider";
+import { useAuth } from "@/lib/providers/AuthProvider";
 import { Product } from "@/lib/types/product";
 import Image from "next/image";
 import React from "react";

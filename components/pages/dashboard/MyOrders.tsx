@@ -1,5 +1,7 @@
 "use client"
-import { useAuth } from '@/lib/context/AuthProvider';
+import { getOrders } from '@/lib/api/getOrders';
+import { useAuth } from '@/lib/providers/AuthProvider';
+import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { FaBangladeshiTakaSign } from 'react-icons/fa6';
 
@@ -25,17 +27,38 @@ interface IOrder {
 }
 
 const MyOrders = () => {
-    const [orders, setOrders] = useState<IOrder[]>([])
+
     const { user } = useAuth()
-    useEffect(() => {
-        const getOrders = async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders/user/${user?._id}`)
-            const data = await res.json()
-            setOrders(data.data)
+
+    const { isLoading, error, data: orders } = useQuery({
+        queryKey: ["my-order", user?._id],
+        queryFn: () => getOrders(user!._id),
+        enabled: !!user?._id
+    })
+
+    console.log("my orders", orders);
+
+    if (isLoading) return <p>Loading...</p>;
+    if (error instanceof Error) return <p>{error.message}</p>;
+
+
+    // cancel order or delte order
+    const handleOrder = async (order: IOrder) => {
+        if (order.status === "pending") {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders/${order?._id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: 'cancelled',
+                }),
+            })
+            console.log("res", res);
         }
-        getOrders()
-    }, [user?._id])
-    console.log("orders data", orders);
+
+    }
+
     return (
         <div>
             <div className="overflow-x-auto">
@@ -45,9 +68,10 @@ const MyOrders = () => {
                         <tr>
                             <th>Product</th>
                             <th>Total Price</th>
+                            <th>Date</th>
                             <th>Status</th>
                             <th>Action</th>
-                            <th>Date</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -69,9 +93,10 @@ const MyOrders = () => {
                             </td>
                             <td className='flex items-center gap-1'><FaBangladeshiTakaSign />{order.totalPrice}</td>
                             <td>Jan 8</td>
-                            <td><span className='badge badge-sm badge-soft badge-warning'>{order?.status}</span> </td>
+                            <td><span className={`badge badge-sm badge-soft ${order.status === 'pending' && "badge-warning"} ${order.status === 'cancelled' && "badge-error"} ${order?.status === "confirmed" && "badge-success"}`}>{order?.status}</span> </td>
                             <th>
-                                <button className="btn btn-ghost btn-xs">{order?.status === 'pending' ? "cancel" : "delete"}</button>
+                                <button onClick={() => handleOrder(order)}
+                                    className="btn btn-ghost btn-xs">{order?.status === 'pending' ? "cancel" : "delete"}</button>
                             </th>
                         </tr>)}
 
@@ -79,6 +104,7 @@ const MyOrders = () => {
                 </table>
             </div>
         </div>
+
     );
 };
 

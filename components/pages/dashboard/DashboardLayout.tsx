@@ -1,7 +1,7 @@
 "use client"
 import LoadingScreen from "@/components/LoadingScreen";
 import NavLink from "@/components/NavLink/NavLink";
-import { useAuth } from "@/lib/context/AuthProvider";
+import { useAuth } from "@/lib/providers/AuthProvider";
 import React from "react";
 import {
     HiOutlineMenuAlt2,

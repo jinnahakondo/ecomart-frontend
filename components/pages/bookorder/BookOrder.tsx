@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/lib/context/AuthProvider";
+import { useAuth } from "@/lib/providers/AuthProvider";
 import { Product } from "@/lib/types/product";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";

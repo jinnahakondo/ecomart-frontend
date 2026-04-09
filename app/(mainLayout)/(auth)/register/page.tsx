@@ -1,5 +1,5 @@
 "use client"
-import { useAuth } from '@/lib/context/AuthProvider'
+import { useAuth } from '@/lib/providers/AuthProvider'
 import Link from 'next/link'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"

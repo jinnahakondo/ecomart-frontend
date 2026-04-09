@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/lib/context/AuthProvider";
+import { useAuth } from "@/lib/providers/AuthProvider";
 import Image from "next/image";
 import { FaPen } from "react-icons/fa";
 
@@ -19,7 +19,7 @@ export default function Profile() {
                         {/* Avatar area */}
                         <div className="relative">
                             <Image
-                                src={user.avatar}
+                                src={user?.avatar}
                                 alt="avatar"
                                 width={90}
                                 height={90}
@@ -34,7 +34,7 @@ export default function Profile() {
 
                         {/* User info */}
                         <h2 className="text-xl font-semibold mt-4">
-                            {user.name}
+                            {user?.name}
                         </h2>
 
                         <p className="text-sm text-gray-500">

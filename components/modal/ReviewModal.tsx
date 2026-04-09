@@ -1,4 +1,4 @@
-import { User } from "@/lib/context/AuthProvider";
+import { User } from "@/lib/providers/AuthProvider";
 import React, { useState } from "react";
 
 interface ReviewModalProps {

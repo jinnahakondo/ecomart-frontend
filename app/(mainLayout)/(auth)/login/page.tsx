@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa6";
-import { useAuth } from "@/lib/context/AuthProvider";
+import { useAuth } from "@/lib/providers/AuthProvider";
 
 interface Inputs {
     email: string;

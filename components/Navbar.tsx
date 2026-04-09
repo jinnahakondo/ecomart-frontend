@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import NavLink from "./NavLink/NavLink";
-import { useAuth } from "@/lib/context/AuthProvider";
+import { useAuth } from "@/lib/providers/AuthProvider";
 
 export default function Navbar() {
     // auth state from context
