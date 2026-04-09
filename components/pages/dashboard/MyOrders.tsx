@@ -1,11 +1,12 @@
 "use client"
+import OrderDetailsModal from '@/components/modal/OrderDetailsModal';
 import { getOrders } from '@/lib/api/getOrders';
 import { useAuth } from '@/lib/providers/AuthProvider';
-import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaBangladeshiTakaSign } from 'react-icons/fa6';
 
-interface IOrder {
+export interface IOrder {
     _id: string
     userId: string;
     productId: {
@@ -27,37 +28,61 @@ interface IOrder {
 }
 
 const MyOrders = () => {
+    const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
 
     const { user } = useAuth()
 
-    const { isLoading, error, data: orders } = useQuery({
+    const modalRef = useRef<HTMLDialogElement | null>(null);
+
+    const queryClient = useQueryClient()
+
+    const { isLoading, error, data: orders = [] } = useQuery<IOrder[]>({
         queryKey: ["my-order", user?._id],
         queryFn: () => getOrders(user!._id),
         enabled: !!user?._id
     })
 
-    console.log("my orders", orders);
+    // cancel order
+    const { mutate: onCancel } = useMutation({
+        mutationFn: async (orderId: string) => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders/${orderId}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: "cancelled" }),
+            });
+            return res.json()
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ["my-order", user?._id] })
+            modalRef?.current?.close()
+        },
+    })
+
+    // delete order
+    const { mutate: onDelete } = useMutation({
+        mutationFn: async (orderId: string) => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders/${orderId}`, {
+                method: "DELETE"
+            })
+            return res.json()
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ["my-order", user?._id] })
+            modalRef?.current?.close()
+        },
+    })
+
 
     if (isLoading) return <p>Loading...</p>;
     if (error instanceof Error) return <p>{error.message}</p>;
 
-
-    // cancel order or delte order
-    const handleOrder = async (order: IOrder) => {
-        if (order.status === "pending") {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders/${order?._id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    status: 'cancelled',
-                }),
-            })
-            console.log("res", res);
-        }
-
+    //open the order detail modal 
+    const handleModal = (order: IOrder) => {
+        setSelectedOrder(order)
+        modalRef?.current?.showModal()
     }
+
+
 
     return (
         <div>
@@ -93,16 +118,23 @@ const MyOrders = () => {
                             </td>
                             <td className='flex items-center gap-1'><FaBangladeshiTakaSign />{order.totalPrice}</td>
                             <td>Jan 8</td>
-                            <td><span className={`badge badge-sm badge-soft ${order.status === 'pending' && "badge-warning"} ${order.status === 'cancelled' && "badge-error"} ${order?.status === "confirmed" && "badge-success"}`}>{order?.status}</span> </td>
+                            <td><span className={`badge badge - sm badge - soft ${order.status === 'pending' && "badge-warning"} ${order.status === 'cancelled' && "badge-error"} ${order?.status === "confirmed" && "badge-success"}`}>{order?.status}</span> </td>
                             <th>
-                                <button onClick={() => handleOrder(order)}
-                                    className="btn btn-ghost btn-xs">{order?.status === 'pending' ? "cancel" : "delete"}</button>
+                                <button onClick={() => handleModal(order)}
+                                    className="btn btn-ghost btn-xs">details</button>
                             </th>
                         </tr>)}
 
                     </tbody>
                 </table>
             </div>
+
+            <OrderDetailsModal
+                modalRef={modalRef}
+                order={selectedOrder}
+                onCancel={onCancel}
+                onDelete={onDelete}
+            />
         </div>
 
     );
