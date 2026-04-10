@@ -1,7 +1,6 @@
 "use client"
 import LoadingScreen from "@/components/LoadingScreen";
 import NavLink from "@/components/NavLink/NavLink";
-import { useAuth } from "@/lib/providers/AuthProvider";
 import React from "react";
 import {
     HiOutlineMenuAlt2,
@@ -13,6 +12,7 @@ import { FaRegUser, FaRegStar } from "react-icons/fa";
 import { LuUsers } from "react-icons/lu";
 import { MdOutlineInventory2 } from "react-icons/md";
 import Link from "next/link";
+import { useAuth } from "@/lib/providers/AuthProvider";
 
 
 export default function DashboardLayout({
