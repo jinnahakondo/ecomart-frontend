@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useAuth } from "@/lib/providers/AuthProvider";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
 import {
   FaUserPlus,
   FaEllipsisV,
@@ -9,77 +11,40 @@ import {
 } from "react-icons/fa";
 
 type User = {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   role: "admin" | "lead architect" | "developer" | "designer";
-  joinedDate: string;
-  status: "active" | "offline" | "suspended";
+  createdAt: string;
+  status: "active" | "suspended";
 };
-
-const dummyUsers: User[] = [
-  {
-    id: "1",
-    name: "Alex Bennett",
-    email: "a.bennett@enterprise.com",
-    role: "admin",
-    joinedDate: "Oct 12, 2023",
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Sarah Chen",
-    email: "s.chen@enterprise.com",
-    role: "lead architect",
-    joinedDate: "Nov 04, 2023",
-    status: "active",
-  },
-  {
-    id: "3",
-    name: "James Miller",
-    email: "j.miller@enterprise.com",
-    role: "developer",
-    joinedDate: "Jan 15, 2024",
-    status: "offline",
-  },
-  {
-    id: "4",
-    name: "Laura Palmer",
-    email: "l.palmer@enterprise.com",
-    role: "designer",
-    joinedDate: "Feb 01, 2024",
-    status: "suspended",
-  },
-];
 
 export default function ManageUsers() {
   const [search, setSearch] = useState("");
+  const { user } = useAuth();
 
-  const filteredUsers = dummyUsers.filter(
-    (u) =>
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const { isLoading, data: users = [] } = useQuery({
+    queryKey: ["manage-users", user?._id],
+    queryFn: async () => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/users`);
+      if (!res.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const data = await res.json();
+      return data.data;
+    },
+  });
 
-  const stats = {
-    total: dummyUsers.length,
-    active: dummyUsers.filter((u) => u.status === "active").length,
-    newThisMonth: 2,
-    pending: 1,
-  };
-
-  const getStatusBadge = (status: User["status"]) => {
-    switch (status) {
-      case "active":
-        return "badge-success";
-      case "suspended":
-        return "badge-error";
-    }
-  };
+  const filteredUsers = useMemo(() => {
+    return users.filter(
+      (u: User) =>
+        u.name.toLowerCase().includes(search.toLowerCase()) ||
+        u.email.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [users, search]);
 
   return (
     <div className="p-4 space-y-6">
-
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
@@ -97,7 +62,6 @@ export default function ManageUsers() {
 
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-3 md:items-center justify-between">
-
         <div className="flex gap-2">
           <button className="btn btn-outline btn-sm gap-2">
             <FaFilter />
@@ -133,35 +97,49 @@ export default function ManageUsers() {
           </thead>
 
           <tbody>
-            {filteredUsers.map((user) => (
-              <tr key={user.id} className="hover">
-
-                {/* Name */}
-                <td>{user.name}</td>
-                {/* Email  */}
-                <td>{user.email}</td>
-                {/* Role */}
-                <td>{user.role}</td>
-
-                {/* Date */}
-                <td>{user.joinedDate}</td>
-
-                {/* Status */}
-                <td>
-                  <span className={`badge badge-soft badge-sm ${getStatusBadge(user.status)}`}>
-                    {user.status}
-                  </span>
-                </td>
-
-                {/* Action */}
-                <td className="text-right">
-                  <button className="btn btn-ghost btn-sm">
-                    <FaEllipsisV />
-                  </button>
-                </td>
-
+            {isLoading ? (
+              <tr className="text-center">
+                <td colSpan={6}>Loading users...</td>
               </tr>
-            ))}
+            ) : filteredUsers.length === 0 ? (
+              <tr className="text-center">
+                <td colSpan={6}>No Users Found</td>
+              </tr>
+            ) : (
+              filteredUsers.map((u: User) => (
+                <tr key={u._id} className="hover">
+                  <td>{u.name}</td>
+                  <td>{u.email}</td>
+                  <td>{u.role}</td>
+                  <td>{u.createdAt?.split("T")[0]}</td>
+                  <td>
+                    <span
+                      className={`badge badge-soft badge-sm ${(u.status || "active") === "active"
+                          ? "badge-success"
+                          : "badge-error"
+                        }`}
+                    >
+                      {u.status || "active"}
+                    </span>
+                  </td>
+                  <td className="text-right">
+                    <details className="dropdown dropdown-end">
+                      <summary className="btn btn-ghost btn-sm">
+                        <FaEllipsisV />
+                      </summary>
+                      <ul className="menu dropdown-content bg-base-100 rounded-box z-10 w-32 p-2 shadow">
+                        <li>
+                          <button className="text-error">Delete</button>
+                        </li>
+                        <li>
+                          <button>Edit</button>
+                        </li>
+                      </ul>
+                    </details>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -169,7 +147,7 @@ export default function ManageUsers() {
       {/* Pagination */}
       <div className="flex justify-between items-center text-sm">
         <p className="text-gray-500">
-          Showing 1 to {filteredUsers.length} of {dummyUsers.length} users
+          Showing 1 to {filteredUsers.length} of {users.length} users
         </p>
 
         <div className="join">
@@ -178,7 +156,6 @@ export default function ManageUsers() {
           <button className="join-item btn btn-sm">3</button>
         </div>
       </div>
-
     </div>
   );
 }
