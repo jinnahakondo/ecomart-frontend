@@ -3,7 +3,7 @@ import OrderDetailsModal from '@/components/modal/OrderDetailsModal';
 import { getOrders } from '@/lib/api/getOrders';
 import { useAuth } from '@/lib/providers/AuthProvider';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaBangladeshiTakaSign } from 'react-icons/fa6';
 
 export interface IOrder {
@@ -118,7 +118,7 @@ const MyOrders = () => {
                             </td>
                             <td className='flex items-center gap-1'><FaBangladeshiTakaSign />{order.totalPrice}</td>
                             <td>Jan 8</td>
-                            <td><span className={`badge badge - sm badge - soft ${order.status === 'pending' && "badge-warning"} ${order.status === 'cancelled' && "badge-error"} ${order?.status === "confirmed" && "badge-success"}`}>{order?.status}</span> </td>
+                            <td><span className={`badge badge-sm badge-soft ${order.status === 'pending' && "badge-warning"} ${order.status === 'cancelled' && "badge-error"} ${order?.status === "confirmed" && "badge-success"}`}>{order?.status}</span> </td>
                             <th>
                                 <button onClick={() => handleModal(order)}
                                     className="btn btn-ghost btn-xs">details</button>
