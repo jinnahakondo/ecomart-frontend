@@ -86,9 +86,9 @@ export default function Navbar() {
         }
 
         return (
-            <Link href="/login">
+            <>
                 <FaUser size={22} />
-            </Link>
+            </>
         );
     };
 

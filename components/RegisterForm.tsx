@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FaGoogle } from 'react-icons/fa6'
 
@@ -18,6 +18,8 @@ interface Props {
 
 export default function RegisterForm({ modalRef, setIsLogin }: Props) {
 
+    const [loading, setLoading] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -26,6 +28,7 @@ export default function RegisterForm({ modalRef, setIsLogin }: Props) {
 
     //Login handler 
     const handleRegister: SubmitHandler<Inputs> = async (data) => {
+        setLoading(true)
         const uri = `${process.env.NEXT_PUBLIC_API}/auth/register`;
 
         try {
@@ -48,6 +51,7 @@ export default function RegisterForm({ modalRef, setIsLogin }: Props) {
             alert(error.message || "Something went wrong");
         }
         finally {
+            setLoading(false)
             modalRef.current?.close();
         }
     };
@@ -94,7 +98,7 @@ export default function RegisterForm({ modalRef, setIsLogin }: Props) {
                 </div>
                 {/* sign up button  */}
                 <button type="submit" className='btn btn-primary mt-4 w-full'>
-                    Sign Up
+                    {loading ? "Submiting..." : " Sign Up"}
                 </button>
             </form>
             {/* google login and other links */}
