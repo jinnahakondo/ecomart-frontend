@@ -1,5 +1,5 @@
 "use client"
-import { useAuth } from '@/lib/providers/AuthProvider'
+
 import Link from 'next/link'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
@@ -11,8 +11,13 @@ interface Inputs {
     password: string,
 }
 
-export default function RegisterPage() {
-    const { setUser } = useAuth()
+interface Props {
+    modalRef: React.RefObject<HTMLDialogElement | null>;
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function RegisterForm({ modalRef, setIsLogin }: Props) {
+
     const {
         register,
         handleSubmit,
@@ -21,21 +26,33 @@ export default function RegisterPage() {
 
     //Login handler 
     const handleRegister: SubmitHandler<Inputs> = async (data) => {
-        const uri = `${process.env.NEXT_PUBLIC_API}/auth/register`
-        // const uri = `http://localhost:5000/api/auth/register`
-        const res = await fetch(uri, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })
-        const user = await res.json()
-        setUser(user.data)
+        const uri = `${process.env.NEXT_PUBLIC_API}/auth/register`;
 
-    }
+        try {
+            const res = await fetch(uri, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!res.ok) {
+                throw new Error("Registration failed");
+            }
+
+            alert("Register successful");
+            setIsLogin(true)
+
+        } catch (error: any) {
+            alert(error.message || "Something went wrong");
+        }
+        finally {
+            modalRef.current?.close();
+        }
+    };
     return (
-        <div className='max-w-96 mt-20 bg-base-100 border p-2.5 border-base-300 rounded-2xl mx-auto'>
+        <div className='max-w-96 bg-base-100 border p-2.5 border-base-300 rounded-2xl mx-auto'>
             <form onSubmit={handleSubmit(handleRegister)}>
                 <div className='flex flex-col gap-4'>
                     {/* name  */}
@@ -91,7 +108,11 @@ export default function RegisterPage() {
 
                 <div className='flex items-center gap-2 justify-center text-sm md:text-base'>
                     <p className=''>Not a member yet?</p>
-                    <Link href={'/login'} className='link'>Log in</Link>
+                    <button
+                        onClick={() => {
+                            setIsLogin(true)
+                        }}
+                        className='link'>Log in</button>
                 </div>
             </div>
         </div>

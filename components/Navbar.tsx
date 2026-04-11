@@ -6,10 +6,14 @@ import { FaCartShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import NavLink from "./NavLink/NavLink";
 import { useAuth } from "@/lib/providers/AuthProvider";
+import AuthModal from "./modal/AuthModal";
+import { useRef } from "react";
 
 export default function Navbar() {
     // auth state from context
     const { user, loading, setUser } = useAuth();
+
+    const modalRef = useRef<HTMLDialogElement | null>(null)
 
     // logout user and update UI instantly
     const handleLogout = async () => {
@@ -40,6 +44,9 @@ export default function Navbar() {
             <li><NavLink href="/about">About</NavLink></li>
             <li><NavLink href="/contact">Contact</NavLink></li>
             <li><NavLink href="/blog">Blog</NavLink></li>
+            <li><button onClick={() => {
+                modalRef.current?.showModal()
+            }}>Login</button></li>
 
             {user && (
                 <li>
@@ -152,6 +159,8 @@ export default function Navbar() {
                     {renderAuthSection()}
                 </div>
             </div>
+            {/* modal */}
+            <AuthModal modalRef={modalRef} />
         </div>
     );
 }

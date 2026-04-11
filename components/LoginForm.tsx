@@ -1,22 +1,28 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa6";
-import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/lib/providers/AuthProvider";
+
+interface Props {
+    modalRef: React.RefObject<HTMLDialogElement | null>;
+    setIsLogin: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 interface Inputs {
     email: string;
     password: string;
 }
 
-export default function LoginForm() {
+export default function LoginForm({ modalRef, setIsLogin }: Props) {
+    const { setUser } = useAuth()
+
     const router = useRouter();
-    const queryClient = useQueryClient();
 
     const [loading, setLoading] = useState(false);
+
     const [serverError, setServerError] = useState("");
 
     const {
@@ -40,26 +46,27 @@ export default function LoginForm() {
                 }
             );
 
-            const result = await res.json();
 
             if (!res.ok) {
-                setServerError(result.message || "Login failed");
-                return;
+                throw new Error("Login failed");
             }
 
+            const result = await res.json();
+
             //instant global auth update
-            queryClient.setQueryData(["auth-user"], result.user);
+            setUser(result?.data)
 
             router.push("/");
-        } catch {
-            setServerError("Something went wrong");
+        } catch (error: any) {
+            setServerError(error.message || "Something went wrong");
         } finally {
             setLoading(false);
+            modalRef.current?.close()
         }
     };
 
     return (
-        <div className="max-w-96 mt-20 bg-base-100 border rounded-2xl mx-auto p-4">
+        <div className="max-w-96 bg-base-100 rounded-2xl mx-auto p-4">
             <form onSubmit={handleSubmit(handleLogin)}>
                 <div className="flex flex-col gap-4">
                     <h2 className="text-2xl font-bold text-center py-8">
@@ -118,9 +125,13 @@ export default function LoginForm() {
 
                 <div className="flex justify-center gap-2 text-sm">
                     <p>Not registered?</p>
-                    <Link href="/register" className="link">
+                    <button
+                        onClick={() => {
+                            setIsLogin(false)
+                        }}
+                        className="link">
                         Register
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>

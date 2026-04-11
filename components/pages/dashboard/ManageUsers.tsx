@@ -115,8 +115,8 @@ export default function ManageUsers() {
                   <td>
                     <span
                       className={`badge badge-soft badge-sm ${(u.status || "active") === "active"
-                          ? "badge-success"
-                          : "badge-error"
+                        ? "badge-success"
+                        : "badge-error"
                         }`}
                     >
                       {u.status || "active"}
