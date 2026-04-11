@@ -1,7 +1,10 @@
+import ManageOrders from '@/components/pages/dashboard/ManageOrders'
 import React from 'react'
 
-export default function ManageOrders() {
+export default function ManageOrdersPage() {
   return (
-    <div>ManageOrders</div>
+    <div>
+      <ManageOrders />
+    </div>
   )
 }

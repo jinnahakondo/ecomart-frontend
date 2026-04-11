@@ -122,20 +122,26 @@ export default function ManageUsers() {
                       {u.status || "active"}
                     </span>
                   </td>
+                  {/* Action */}
                   <td className="text-right">
-                    <details className="dropdown dropdown-end">
-                      <summary className="btn btn-ghost btn-sm">
+                    <div className="dropdown dropdown-left">
+                      <button className="btn btn-ghost btn-sm">
                         <FaEllipsisV />
-                      </summary>
-                      <ul className="menu dropdown-content bg-base-100 rounded-box z-10 w-32 p-2 shadow">
-                        <li>
-                          <button className="text-error">Delete</button>
-                        </li>
+                      </button>
+
+                      <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32">
                         <li>
                           <button>Edit</button>
                         </li>
+                        <li>
+                          <button
+                            className="text-red-500"
+                          >
+                            Delete
+                          </button>
+                        </li>
                       </ul>
-                    </details>
+                    </div>
                   </td>
                 </tr>
               ))

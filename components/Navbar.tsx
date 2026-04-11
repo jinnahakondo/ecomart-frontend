@@ -44,9 +44,9 @@ export default function Navbar() {
             <li><NavLink href="/about">About</NavLink></li>
             <li><NavLink href="/contact">Contact</NavLink></li>
             <li><NavLink href="/blog">Blog</NavLink></li>
-            <li><button onClick={() => {
+            {!user && <li><button onClick={() => {
                 modalRef.current?.showModal()
-            }}>Login</button></li>
+            }}>Login</button></li>}
 
             {user && (
                 <li>
