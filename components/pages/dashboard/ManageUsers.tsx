@@ -9,6 +9,7 @@ import {
   FaSearch,
   FaFilter,
 } from "react-icons/fa";
+import DashboardPageHeader from "./DashboardPageHeader";
 
 type User = {
   _id: string;
@@ -46,19 +47,15 @@ export default function ManageUsers() {
   return (
     <div className="p-4 space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold">Manage Users</h1>
-          <p className="text-sm text-gray-500">
-            Directory of enterprise staff, permissions, and access logs.
-          </p>
-        </div>
-
-        <button className="btn btn-primary gap-2">
+      <DashboardPageHeader
+        title="Manage Users"
+        subTitle="Directory of enterprise staff, permissions, and access logs.
+        "
+        headerBtnContent={<>
           <FaUserPlus />
           Add New User
-        </button>
-      </div>
+        </>}
+      />
 
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-3 md:items-center justify-between">

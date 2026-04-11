@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaPlus, FaEllipsisV } from "react-icons/fa";
+import DashboardPageHeader from "./DashboardPageHeader";
 
 type Order = {
     _id: string;
@@ -99,17 +100,14 @@ export default function ManageOrders() {
         <div className="p-4 space-y-5">
 
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between gap-3">
-                <h1 className="text-2xl font-semibold">Manage Orders</h1>
+            <DashboardPageHeader
+                title="Manage Orders"
+                headerBtnContent={<>
+                    <FaPlus />
+                    Create Order
+                </>}
 
-                <div className="mb-6">
-
-                    <button className="btn btn-primary btn-sm gap-2">
-                        <FaPlus />
-                        Create Order
-                    </button>
-                </div>
-            </div>
+            />
 
             {/* Filter */}
             <div className="flex justify-between items-center">
