@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaPlus, FaEllipsisV } from "react-icons/fa";
 import DashboardPageHeader from "./DashboardPageHeader";
+import Swal from "sweetalert2";
 
 type Order = {
     _id: string;
@@ -53,48 +54,59 @@ export default function ManageOrders() {
             ? data || []
             : data?.filter((order: Order) => order.status === filter) || [];
 
-    const getBadge = (status: Order["status"]) => {
-        switch (status) {
+
+
+    const getNextStatus = (currentStatus: string) => {
+        switch (currentStatus) {
             case "pending":
-                return "badge-warning";
+                return ["shipped", "cancelled"];
             case "shipped":
-                return "badge-info";
-            case "delivered":
-                return "badge-success";
-            case "cancelled":
-                return "badge-error";
+                return ["delivered"];
+            default:
+                return [];
         }
     };
 
 
-    // CREATE ORDER
-    const createOrder = useMutation({
-        mutationFn: async (newOrder: any) => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newOrder),
-            });
-            return res.json();
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["manage-orders"] });
-        },
-    });
-
-    // DELETE ORDER
-    const deleteOrder = useMutation({
+    // DELETE ORDER 
+    const { mutate: deleteOrder } = useMutation({
         mutationFn: async (id: string) => {
-            await fetch(`${process.env.NEXT_PUBLIC_API}/orders/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders/${id}`, {
                 method: "DELETE",
             });
+            if (!res.ok) {
+                throw new Error("Delete failed")
+            }
+            return res?.json()
+
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["manage-orders"] });
+            Swal.fire({
+                title: "Order is deleted",
+                icon: "success"
+            })
         },
+        onError: () => {
+            Swal.fire({
+                title: "Something went wrong",
+                icon: "error"
+            })
+        }
     });
+
+    const handleDelete = async (id: string) => {
+        const result = await Swal.fire({
+            title: "Want to delete this order?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+        });
+
+        if (!result.isConfirmed) return;
+
+        await deleteOrder(id);
+    };
 
     return (
         <div className="p-4 space-y-5">
@@ -102,11 +114,6 @@ export default function ManageOrders() {
             {/* Header */}
             <DashboardPageHeader
                 title="Manage Orders"
-                headerBtnContent={<>
-                    <FaPlus />
-                    Create Order
-                </>}
-
             />
 
             {/* Filter */}
@@ -137,8 +144,8 @@ export default function ManageOrders() {
                             <th>Customer</th>
                             <th>Product</th>
                             <th>Date</th>
-                            <th>Status</th>
                             <th>Total</th>
+                            <th>Status</th>
                             <th className="text-right">Action</th>
                         </tr>
                     </thead>
@@ -196,16 +203,19 @@ export default function ManageOrders() {
                                     {new Date(order.createdAt).toLocaleDateString()}
                                 </td>
 
-                                {/* Status */}
-                                <td>
-                                    <span className={`badge badge-sm badge-soft ${getBadge(order.status)}`}>
-                                        {order.status}
-                                    </span>
-                                </td>
-
                                 {/* Total */}
                                 <td>৳{order.totalPrice}</td>
-
+                                {/* Status */}
+                                <td>
+                                    <select className="select outline-none ">
+                                        <option value={order.status}>
+                                            {order.status}
+                                        </option>
+                                        {getNextStatus(order.status).map((status, i) => <option value={status} key={i}>
+                                            {status}
+                                        </option>)}
+                                    </select>
+                                </td>
                                 {/* Action */}
                                 <td className="text-right">
                                     <div className="dropdown dropdown-left">
@@ -215,10 +225,8 @@ export default function ManageOrders() {
 
                                         <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32">
                                             <li>
-                                                <button>Edit</button>
-                                            </li>
-                                            <li>
                                                 <button
+                                                    onClick={() => handleDelete(order._id)}
                                                     className="text-red-500"
                                                 >
                                                     Delete
@@ -227,7 +235,6 @@ export default function ManageOrders() {
                                         </ul>
                                     </div>
                                 </td>
-
                             </tr>
                         ))}
 
