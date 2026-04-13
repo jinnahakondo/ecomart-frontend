@@ -24,18 +24,6 @@ export default function ManageOrders() {
     const [filter, setFilter] = useState("all");
     const queryClient = useQueryClient();
 
-    const [formData, setFormData] = useState({
-        fullName: "",
-        phone: "",
-        district: "",
-        city: "",
-        area: "",
-        postalCode: "",
-        productId: "",
-        quantity: 1,
-        price: 0,
-    });
-
     //  Fetch Orders
     const { data, isLoading, isError } = useQuery({
         queryKey: ["manage-orders"],
@@ -67,6 +55,28 @@ export default function ManageOrders() {
         }
     };
 
+    //UPDATE ORDER STATUS
+    const { mutate: updateStatus } = useMutation({
+        mutationFn: async (data: { id: string, status: string }) => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders/${data.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status: data.status }),
+            });
+            if (!res.ok) {
+                throw new Error("failed to update status")
+            }
+            return res.json()
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["manage-orders"] });
+            Swal.fire({
+                icon: "success"
+            })
+        }
+    })
 
     // DELETE ORDER 
     const { mutate: deleteOrder } = useMutation({
@@ -105,7 +115,7 @@ export default function ManageOrders() {
 
         if (!result.isConfirmed) return;
 
-        await deleteOrder(id);
+        deleteOrder(id);
     };
 
     return (
@@ -207,7 +217,14 @@ export default function ManageOrders() {
                                 <td>৳{order.totalPrice}</td>
                                 {/* Status */}
                                 <td>
-                                    <select className="select outline-none ">
+                                    <select
+                                        onChange={(e) => {
+                                            updateStatus({
+                                                id: order._id,
+                                                status: e.target.value,
+                                            });
+                                        }}
+                                        className="select outline-none ">
                                         <option value={order.status}>
                                             {order.status}
                                         </option>

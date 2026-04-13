@@ -2,20 +2,29 @@
 
 import GiveAReviewBtn from "@/components/buttons/GiveAReviewBtn";
 import ReviewModal from "@/components/modal/ReviewModal";
-import { useAuth } from "@/lib/providers/AuthProvider";
-import { Product } from "@/lib/types/product";
+import { Review } from "@/lib/types/product";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
 import { FaStar } from "react-icons/fa";
 
 type ReviewSectionProps = {
-  product: Product;
+  id: string
 };
 
-export default function ReviewSection({ product }: ReviewSectionProps) {
-  const { user } = useAuth();
+export default function ReviewSection({ id }: ReviewSectionProps) {
+  console.log(id);
 
   const reviewModalRef = React.useRef<HTMLDialogElement>(null);
+
+  const { data: reviews = [], isLoading, refetch: refetchReviews } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: async () => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/reviews/${id}`)
+      const result = await res.json()
+      return result.data
+    }
+  })
 
   const openModal = () => {
     reviewModalRef.current?.showModal();
@@ -24,6 +33,7 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
   const closeModal = () => {
     reviewModalRef.current?.close();
   };
+
 
   return (
     <div className="mt-14">
@@ -38,12 +48,14 @@ export default function ReviewSection({ product }: ReviewSectionProps) {
       <ReviewModal
         reviewModalRef={reviewModalRef}
         closeModal={closeModal}
-        user={user}
+        id={id}
+        refetchReviews={refetchReviews}
       />
 
       {/* Reviews */}
       <div className="space-y-4">
-        {product.reviews.map((review) => (
+        {isLoading ? <p className="text-center">loading...</p> : reviews.length === 0 && <p className='text-base-content/80'>No Reviews Found</p>}
+        {reviews.map((review: Review) => (
           <div
             key={review._id}
             className="bg-base-200 p-5 rounded-xl"

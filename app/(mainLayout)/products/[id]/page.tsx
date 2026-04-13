@@ -13,10 +13,14 @@ type Props = {
 const getProduct = async (id: string) => {
     const res = await fetch(`${process.env.API}/products/${id}`)
     const data = await res.json();
+    console.log(data);
     return data.data
 }
 export default async function ProductDetails({ params }: Props) {
+    console.log(`${process.env.API}`);
     const { id } = await params;
+
+    console.log(id);
 
     const product: Product = await getProduct(id)
 
@@ -29,7 +33,7 @@ export default async function ProductDetails({ params }: Props) {
                     {/* Product Image */}
                     <div className="bg-base-200 rounded-2xl p-6">
                         <Image
-                            src={product.thumbnail}
+                            src={product?.thumbnail}
                             alt={product.title}
                             width={100}
                             height={100}
@@ -93,7 +97,8 @@ export default async function ProductDetails({ params }: Props) {
                 </div>
 
                 {/* Reviews Section */}
-                <ReviewSection product={product} />
+
+                <ReviewSection id={product._id} />
 
             </div>
         </section>

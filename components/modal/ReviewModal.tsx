@@ -1,20 +1,25 @@
-import { User } from "@/lib/providers/AuthProvider";
+"use cilent"
+import { useAuth } from "@/lib/providers/AuthProvider";
 import React, { useState } from "react";
 
 interface ReviewModalProps {
     reviewModalRef: React.RefObject<HTMLDialogElement | null>;
     closeModal: () => void;
-    user: User | null;
+    refetchReviews: () => void;
+    id: string
 }
 
 export default function ReviewModal({
     reviewModalRef,
     closeModal,
-    user
-
+    refetchReviews,
+    id
 }: ReviewModalProps) {
+
     const [rating, setRating] = useState<number>(0);
     const [comment, setReview] = useState("");
+
+    const { user } = useAuth()
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,12 +28,15 @@ export default function ReviewModal({
             return;
         }
         const reviewData = {
+            userId: user._id,
+            productId: id,
             reviewerName: user.name,
             email: user.email,
             avatar: user.avatar,
             rating,
             comment
         }
+
         //  send the review data to your backend API
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/reviews`, {
@@ -41,6 +49,7 @@ export default function ReviewModal({
             setReview("");
             closeModal();
             alert(result.message || "Review submitted successfully!");
+            refetchReviews()
         } catch (error) {
             console.error("Error submitting review:", error);
         }
