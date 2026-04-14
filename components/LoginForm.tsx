@@ -19,8 +19,6 @@ interface Inputs {
 export default function LoginForm({ modalRef, setIsLogin }: Props) {
     const { setUser } = useAuth()
 
-    const router = useRouter();
-
     const [loading, setLoading] = useState(false);
 
     const [serverError, setServerError] = useState("");
@@ -56,7 +54,6 @@ export default function LoginForm({ modalRef, setIsLogin }: Props) {
             //instant global auth update
             setUser(result?.data)
 
-            router.push("/");
         } catch (error: any) {
             setServerError(error.message || "Something went wrong");
         } finally {

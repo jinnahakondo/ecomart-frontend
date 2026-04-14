@@ -34,7 +34,7 @@ export default function MyReviews() {
         queryKey: ["my-reviews", user?.email],
         queryFn: async () => {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API}/reviews/${user?.email}`
+                `${process.env.NEXT_PUBLIC_API}/reviews/my-reviews/${user?._id}`
             );
 
             if (!res.ok) {

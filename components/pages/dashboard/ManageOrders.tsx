@@ -25,7 +25,7 @@ export default function ManageOrders() {
     const queryClient = useQueryClient();
 
     //  Fetch Orders
-    const { data, isLoading, isError } = useQuery({
+    const { data = [], isLoading, isError } = useQuery({
         queryKey: ["manage-orders"],
         queryFn: async () => {
             const res = await fetch(
@@ -34,7 +34,9 @@ export default function ManageOrders() {
             const result = await res.json();
             return result.data;
         },
+        refetchInterval: 5000
     });
+
 
     //  Filter logic
     const filteredOrders =
@@ -200,11 +202,11 @@ export default function ManageOrders() {
                                 <td>
                                     <div className="flex items-center gap-2">
                                         <img
-                                            src={order.productId.thumbnail}
+                                            src={order.productId?.thumbnail}
                                             alt=""
                                             className="w-10 h-10 rounded"
                                         />
-                                        <span>{order.productId.title}</span>
+                                        <span>{order.productId?.title}</span>
                                     </div>
                                 </td>
 
