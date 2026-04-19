@@ -4,10 +4,17 @@ import ProductFilterSidebar from "@/components/pages/products/ProductFilter"
 import ProductPageHeader from "@/components/pages/products/ProductPageHeader"
 import { Product } from "@/lib/types/product"
 
-const getProducts = async (search: string, category: string) => {
-    const res = await fetch(`${process.env.API}/products?search=${search}&&category=${category}`)
+const getProducts = async (search: string, category: string, sort: string, skip: number, limit: number) => {
+    const params = new URLSearchParams({
+        search,
+        category,
+        sort,
+        skip: skip.toString(),
+        limit: limit.toString()
+    });
+    const res = await fetch(`${process.env.API}/products?${params.toString()}`)
     const data = await res.json();
-    return data.data;
+    return data;
 }
 
 type Props = {
@@ -15,6 +22,7 @@ type Props = {
         skip?: string
         search?: string
         category?: string
+        sort?: string
     }
 }
 
@@ -22,8 +30,13 @@ export default async function Products({ searchParams }: Props) {
     const params = await searchParams;
     const search = params.search || "";
     const category = params.category || "";
+    const sort = params.sort || "";
+    const skip = parseInt(params.skip || "0");
+    const limit = 12; // items per page
 
-    const products = await getProducts(search, category)
+    const { data: products, total } = await getProducts(search, category, sort, skip, limit)
+    const totalPages = Math.ceil(total / limit);
+
     return (
         <section className="bg-base-200 min-h-screen px-6 md:px-16 lg:px-24 py-10">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -44,7 +57,7 @@ export default async function Products({ searchParams }: Props) {
                     </div>
 
                     {/* Pagination */}
-                    <Pagination />
+                    <Pagination totalPages={totalPages} currentPage={Math.floor(skip / limit) + 1} />
                 </div>
             </div>
         </section >

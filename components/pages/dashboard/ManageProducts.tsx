@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useState } from "react";
 import { useAuth } from "@/lib/providers/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
 import {
     FaPlus,
     FaEllipsisV,
@@ -28,27 +28,55 @@ type Product = {
 
 export default function ManageProducts() {
     const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const limit = 10;
     const { user } = useAuth();
 
-    const { isLoading, data: products = [] } = useQuery({
-        queryKey: ["manage-products", user?._id],
+    const { isLoading, data, refetch } = useQuery({
+        queryKey: ["manage-products", search, page],
         queryFn: async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/products`);
+            const params = new URLSearchParams({
+                search,
+                skip: ((page - 1) * limit).toString(),
+                limit: limit.toString()
+            });
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/products?${params}`);
             if (!res.ok) {
                 throw new Error("Something went wrong!");
             }
             const data = await res.json();
-            return data.data;
+            return data;
         },
     });
 
-    const filteredProducts = useMemo(() => {
-        return products.filter(
-            (p: Product) =>
-                p.title.toLowerCase().includes(search.toLowerCase()) ||
-                p.category.toLowerCase().includes(search.toLowerCase())
-        );
-    }, [products, search]);
+    const products = data?.data || [];
+    const total = data?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+
+    const handleSearch = (value: string) => {
+        setSearch(value);
+        setPage(1); // reset to first page
+    };
+
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+    };
+
+    const maxVisible = 5;
+    let start = Math.max(1, page - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages, start + maxVisible - 1);
+    if (end - start + 1 < maxVisible) {
+        start = Math.max(1, end - maxVisible + 1);
+    }
+    const pageButtons = Array.from({ length: end - start + 1 }, (_, i) => start + i).map((p) => (
+        <button
+            key={p}
+            className={`join-item btn btn-sm ${p === page ? 'btn-active' : ''}`}
+            onClick={() => handlePageChange(p)}
+        >
+            {p}
+        </button>
+    ));
 
     return (
         <div className="p-4 space-y-6">
@@ -76,7 +104,7 @@ export default function ManageProducts() {
                     <FaSearch className="absolute top-3 left-3 text-gray-400" />
                     <input
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => handleSearch(e.target.value)}
                         type="text"
                         placeholder="Search products..."
                         className="input input-bordered pl-10 w-full md:w-80"
@@ -103,12 +131,12 @@ export default function ManageProducts() {
                             <tr className="text-center">
                                 <td colSpan={6}>Loading products...</td>
                             </tr>
-                        ) : filteredProducts.length === 0 ? (
+                        ) : products.length === 0 ? (
                             <tr className="text-center">
                                 <td colSpan={6}>No Products Found</td>
                             </tr>
                         ) : (
-                            filteredProducts.map((p: Product) => (
+                            products.map((p: Product) => (
                                 <tr key={p._id} className="hover">
                                     {/* Product Info */}
                                     <td className="flex items-center gap-3">
@@ -177,13 +205,25 @@ export default function ManageProducts() {
             {/* Pagination */}
             <div className="flex justify-between items-center text-sm">
                 <p className="text-gray-500">
-                    Showing {filteredProducts.length} of {products.length} products
+                    Showing {products.length} of {total} products
                 </p>
 
                 <div className="join">
-                    <button className="join-item btn btn-sm">1</button>
-                    <button className="join-item btn btn-sm">2</button>
-                    <button className="join-item btn btn-sm">3</button>
+                    <button
+                        className="join-item btn btn-sm"
+                        disabled={page === 1}
+                        onClick={() => handlePageChange(page - 1)}
+                    >
+                        Previous
+                    </button>
+                    {pageButtons}
+                    <button
+                        className="join-item btn btn-sm"
+                        disabled={page === totalPages}
+                        onClick={() => handlePageChange(page + 1)}
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
         </div>

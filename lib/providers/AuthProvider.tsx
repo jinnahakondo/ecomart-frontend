@@ -1,22 +1,11 @@
 "use client"
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { IUser } from "../types/user";
 
-export type User = {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  avatar: string;
-  role: "user" | "admin";
-  provider: "credentials" | "google";
-  createdAt: string;
-  updatedAt: string;
-
-};
 
 type AuthContextType = {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  user: IUser | null;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
   loading: boolean;
 };
 
@@ -27,7 +16,7 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   console.log(user)

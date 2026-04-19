@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useState } from "react";
 import { useAuth } from "@/lib/providers/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
 import {
   FaUserPlus,
   FaEllipsisV,
@@ -22,27 +22,55 @@ type User = {
 
 export default function ManageUsers() {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 10;
   const { user } = useAuth();
 
-  const { isLoading, data: users = [] } = useQuery({
-    queryKey: ["manage-users", user?._id],
+  const { isLoading, data, refetch } = useQuery({
+    queryKey: ["manage-users", search, page],
     queryFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/users`);
+      const params = new URLSearchParams({
+        search,
+        skip: ((page - 1) * limit).toString(),
+        limit: limit.toString()
+      });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/users?${params}`);
       if (!res.ok) {
         throw new Error("Something went wrong!");
       }
       const data = await res.json();
-      return data.data;
+      return data;
     },
   });
 
-  const filteredUsers = useMemo(() => {
-    return users.filter(
-      (u: User) =>
-        u.name.toLowerCase().includes(search.toLowerCase()) ||
-        u.email.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [users, search]);
+  const users = data?.data || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / limit);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setPage(1); // reset to first page
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const maxVisible = 5;
+  let start = Math.max(1, page - Math.floor(maxVisible / 2));
+  let end = Math.min(totalPages, start + maxVisible - 1);
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1);
+  }
+  const pageButtons = Array.from({ length: end - start + 1 }, (_, i) => start + i).map((p) => (
+    <button
+      key={p}
+      className={`join-item btn btn-sm ${p === page ? 'btn-active' : ''}`}
+      onClick={() => handlePageChange(p)}
+    >
+      {p}
+    </button>
+  ));
 
   return (
     <div className="p-4 space-y-6">
@@ -71,7 +99,7 @@ export default function ManageUsers() {
           <FaSearch className="absolute top-3 left-3 text-gray-400" />
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearch(e.target.value)}
             type="text"
             placeholder="Search users..."
             className="input input-bordered pl-10 w-full md:w-80"
@@ -98,12 +126,12 @@ export default function ManageUsers() {
               <tr className="text-center">
                 <td colSpan={6}>Loading users...</td>
               </tr>
-            ) : filteredUsers.length === 0 ? (
+            ) : users.length === 0 ? (
               <tr className="text-center">
                 <td colSpan={6}>No Users Found</td>
               </tr>
             ) : (
-              filteredUsers.map((u: User) => (
+              users.map((u: User) => (
                 <tr key={u._id} className="hover">
                   <td>{u.name}</td>
                   <td>{u.email}</td>
@@ -148,17 +176,31 @@ export default function ManageUsers() {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center text-sm">
-        <p className="text-gray-500">
-          Showing 1 to {filteredUsers.length} of {users.length} users
-        </p>
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center text-sm">
+          <p className="text-gray-500">
+            Showing {users.length} of {total} users
+          </p>
 
-        <div className="join">
-          <button className="join-item btn btn-sm">1</button>
-          <button className="join-item btn btn-sm">2</button>
-          <button className="join-item btn btn-sm">3</button>
+          <div className="join">
+            <button
+              className="join-item btn btn-sm"
+              disabled={page === 1}
+              onClick={() => handlePageChange(page - 1)}
+            >
+              Previous
+            </button>
+            {pageButtons}
+            <button
+              className="join-item btn btn-sm"
+              disabled={page === totalPages}
+              onClick={() => handlePageChange(page + 1)}
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
