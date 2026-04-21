@@ -1,105 +1,29 @@
-import OrderNowBtn from '@/components/buttons/OrderNowBtn'
-
+import ProductView from '@/components/pages/products/ProductDetails/ProductView'
 import ReviewSection from '@/components/pages/products/ReviewSection'
 import { Product } from '@/lib/types/product'
-import Image from 'next/image'
-import React from 'react'
-import { FaBangladeshiTakaSign, FaStar } from 'react-icons/fa6'
 
 type Props = {
     params: { id: string }
 }
 
 const getProduct = async (id: string) => {
-    const res = await fetch(`${process.env.API}/products/${id}`)
-    const data = await res.json();
-    console.log(data);
+    const res = await fetch(`${process.env.API}/products/${id}`, {
+        cache: 'no-store',
+    })
+
+    const data = await res.json()
     return data.data
 }
+
 export default async function ProductDetails({ params }: Props) {
-    console.log(`${process.env.API}`);
-    const { id } = await params;
-
-    console.log(id);
-
+    const { id } = await params
     const product: Product = await getProduct(id)
 
-
     return (
-        <section className="bg-base-100 py-12">
-            <div className="max-w-7xl mx-auto px-2.5">
-                <div className="grid md:grid-cols-2 gap-10">
-
-                    {/* Product Image */}
-                    <div className="bg-base-200 rounded-2xl p-6">
-                        <Image
-                            src={product?.thumbnail}
-                            alt={product.title}
-                            width={100}
-                            height={100}
-                            className="w-full object-contain rounded-xl"
-                        />
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="space-y-4">
-
-                        <p className="text-sm text-primary capitalize">
-                            {product.category}
-                        </p>
-
-                        <h1 className="text-3xl font-bold text-base-content">
-                            {product.title}
-                        </h1>
-
-                        {/* Rating */}
-                        <div className="flex items-center gap-2">
-                            <FaStar className="text-primary" />
-                            <span className="text-base-content/70">
-                                {product.rating} Rating
-                            </span>
-                        </div>
-
-                        {/* Price */}
-                        <div className="flex items-center gap-3">
-                            <span className="text-2xl font-bold text-primary flex items-center gap-1">
-                                <FaBangladeshiTakaSign /> {product?.price.toFixed(0)}
-                            </span>
-
-                            <span className="line-through text-base-content/40 flex items-center gap-1">
-                                <FaBangladeshiTakaSign /> {product?.oldPrice.toFixed(0)}
-                            </span>
-
-                            <span className="badge badge-primary">
-                                {Math.round(product.discountPercentage)}% OFF
-                            </span>
-                        </div>
-
-                        {/* Stock */}
-                        <p className="text-base-content/70">
-                            {product.availabilityStatus} • Stock {product.stock}
-                        </p>
-
-                        {/* Description */}
-                        <p className="text-base-content/80 leading-relaxed">
-                            {product.description}
-                        </p>
-
-                        {/* Extra Info */}
-                        <div className="space-y-1 text-sm text-base-content/70">
-                            <p>Brand: {product.brand}</p>
-                            <p>Weight: {product.weight}g</p>
-                        </div>
-
-                        {/* Order Now button */}
-                        <OrderNowBtn productId={product._id} />
-                    </div>
-                </div>
-
-                {/* Reviews Section */}
-
-                <ReviewSection id={product._id} />
-
+        <section className="py-12">
+            <div className="max-w-7xl mx-auto px-4">
+                <ProductView product={product} />
+                <ReviewSection id={product?._id} />
             </div>
         </section>
     )
