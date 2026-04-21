@@ -1,78 +1,142 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import 'swiper/css/bundle';
+
+
+const slides = [
+    {
+        id: 1,
+        title: 'Upgrade Your Lifestyle With Smart Tech',
+        subtitle: 'Latest gadgets at unbeatable prices',
+        image:
+            'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1200&q=80',
+        discount: '30% OFF',
+        cta: 'Shop Electronics',
+        link: '/shop?category=Electronics',
+    },
+    {
+        id: 2,
+        title: 'Fresh Fashion Collection 2026',
+        subtitle: 'Trendy styles for the modern you',
+        image:
+            'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80',
+        discount: '50% OFF',
+        cta: 'Explore Fashion',
+        link: '/shop?category=Fashion',
+    },
+    {
+        id: 3,
+        title: 'Modern Home Starts Here',
+        subtitle: 'Transform your space with premium furniture',
+        image:
+            'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1200&q=80',
+        discount: '40% OFF',
+        cta: 'Shop Furniture',
+        link: '/shop?category=Furniture',
+    },
+];
 
 export default function Hero() {
+    const router = useRouter();
+
     return (
-        <section className="hero min-h-[65vh] bg-base-200 relative overflow-hidden">
+        <div className="relative h-125 md:h-150 overflow-hidden bg-background">
+            <Swiper
+                modules={[Navigation, Pagination, Autoplay, EffectFade]}
+                slidesPerView={1}
+                loop
+                effect="fade"
+                speed={700}
+                autoplay={{
+                    delay: 5000,
+                    disableOnInteraction: false,
+                }}
+                navigation={{
+                    prevEl: '.hero-prev',
+                    nextEl: '.hero-next',
+                }}
+                pagination={{
+                    clickable: true,
+                    el: '.hero-pagination',
+                    bulletClass: 'hero-bullet',
+                    bulletActiveClass: 'hero-bullet-active',
+                }}
+                className="h-full"
+            >
+                {slides.map((slide) => (
+                    <SwiperSlide key={slide.id}>
+                        <div className="relative h-full">
+                            {/* bg image */}
+                            <div
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{
+                                    backgroundImage: `url(${slide.image})`,
+                                }}
+                            />
 
-            {/* Background Glow */}
-            <div className="absolute w-96 h-96 bg-primary/20 blur-3xl rounded-full -top-24 -left-24" />
-            <div className="absolute w-80 h-80 bg-secondary/20 blur-3xl rounded-full -bottom-24 -right-24" />
+                            {/* overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" />
 
-            <div className="hero-content flex-col lg:flex-row-reverse gap-12">
+                            {/* content */}
+                            <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+                                <div className="max-w-2xl text-white space-y-5">
+                                    <span className="inline-block rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium">
+                                        {slide.discount}
+                                    </span>
 
-                {/* Product Image Animation */}
-                <motion.img
-                    src="/heroimage.png"   // put your product banner image here
-                    alt="Ecommerce Products"
-                    className="max-w-sm md:max-w-md rounded-xl shadow-2xl"
-                    initial={{ opacity: 0, x: 80 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                />
+                                    <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                                        {slide.title}
+                                    </h1>
 
-                {/* Text Content */}
-                <div className="max-w-xl">
-                    <motion.h1
-                        className="text-4xl md:text-5xl font-bold leading-tight"
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        Discover Your Perfect Products
-                    </motion.h1>
+                                    <p className="text-lg md:text-xl text-white/80">
+                                        {slide.subtitle}
+                                    </p>
 
-                    <motion.p
-                        className="py-6 text-base-content/70"
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.6 }}
-                    >
-                        Shop the latest collections with smart recommendations,
-                        fast delivery, and unbeatable prices — all in one place.
-                    </motion.p>
+                                    <button
+                                        onClick={() => router.push(slide.link)}
+                                        className="rounded-lg bg-primary text-primary-foreground px-6 py-3 text-sm md:text-base font-medium hover:opacity-90 transition"
+                                    >
+                                        {slide.cta}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
 
-                    {/* CTA Buttons */}
-                    <motion.div
-                        className="flex gap-4"
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4, duration: 0.6 }}
-                    >
-                        <Link href="/explore" className="btn btn-primary">
-                            Shop Now
-                        </Link>
+            {/* prev */}
+            <button className="hero-prev absolute left-4 top-1/2 z-20 -translate-y-1/2 h-12 w-12 rounded-full bg-background/20 backdrop-blur-md hover:bg-background/30 transition flex items-center justify-center text-white">
+                <ChevronLeft className="h-6 w-6" />
+            </button>
 
-                        <Link href="/deals" className="btn btn-outline">
-                            View Deals
-                        </Link>
-                    </motion.div>
+            {/* next */}
+            <button className="hero-next absolute right-4 top-1/2 z-20 -translate-y-1/2 h-12 w-12 rounded-full bg-background/20 backdrop-blur-md hover:bg-background/30 transition flex items-center justify-center text-white">
+                <ChevronRight className="h-6 w-6" />
+            </button>
 
-                    {/* Small Trust Info */}
-                    <div className="mt-6 flex gap-6 text-sm opacity-70">
-                        <span>🚚 Free Shipping</span>
-                        <span>⭐ Top Rated</span>
-                        <span>🔒 Secure Payment</span>
-                    </div>
-                </div>
-            </div>
+            {/* pagination */}
+            <div className="hero-pagination absolute bottom-8 left-1/2 z-20 -translate-x-1/2 flex gap-2" />
 
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 animate-bounce text-sm opacity-70">
-                Browse Products ↓
-            </div>
-        </section>
+            <style jsx global>{`
+        .hero-bullet {
+          width: 12px;
+          height: 12px;
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.5);
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .hero-bullet-active {
+          width: 32px;
+          background: white;
+        }
+      `}</style>
+        </div>
     );
 }
