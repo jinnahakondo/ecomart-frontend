@@ -10,6 +10,7 @@ import BlogCard from "@/components/cards/BlogCard";
 
 export default function Blog() {
 
+    const bgImage = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80";
 
     const categories = ["All", "Lifestyle", "Guide", "Environmental", "Fashion", "Business"];
     const [selectedCategory, setSelectedCategory] = useState("All");
@@ -27,19 +28,49 @@ export default function Blog() {
     return (
         <main className="min-h-screen bg-base-100">
             {/* Header Section */}
-            <section className="bg-gradient-to-br from-primary to-primary/60 text-white py-20">
-                <div className="max-w-7xl mx-auto px-4 text-center">
+            <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden bg-base-100">
+                {/* Background Image with Overlay */}
+                <div
+                    className="absolute inset-0 z-0"
+                    style={{
+                        backgroundImage: `url(${bgImage})`,
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                    }}
+                >
+                    {/* DaisyUI Overlay - টেক্সট স্পষ্টভাবে পড়ার জন্য */}
+                    <div className="absolute inset-0 bg-neutral/70 backdrop-blur-[1px]"></div>
+                </div>
+
+                {/* Content Section */}
+                <div className="relative z-10 max-w-7xl mx-auto px-6 w-full text-center">
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <h1 className="text-5xl md:text-6xl font-bold mb-4">
-                            Our Blog
+                        {/* Badge Style */}
+                        <div className="badge badge-primary badge-outline mb-6 py-4 px-6 text-sm font-bold tracking-widest uppercase">
+                            Exploring the Green Life
+                        </div>
+
+                        <h1 className="text-5xl md:text-7xl font-black text-neutral-content mb-6 tracking-tight">
+                            Insights for <span className="text-primary italic">Modern</span> Living
                         </h1>
-                        <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                            Tips, guides, and stories about sustainable living and eco-friendly choices
+
+                        <p className="text-lg md:text-xl text-neutral-content/80 max-w-2xl mx-auto leading-relaxed mb-10">
+                            Discover practical tips, expert guides, and inspiring stories designed to help you build a more sustainable and eco-friendly home.
                         </p>
+
+                        {/* CTA Buttons */}
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <button className="btn btn-primary btn-lg rounded-full px-10 shadow-lg border-none text-white">
+                                Start Reading
+                            </button>
+                            <button className="btn btn-outline btn-lg rounded-full px-10 text-white hover:bg-white hover:text-black transition-all">
+                                All Categories
+                            </button>
+                        </div>
                     </motion.div>
                 </div>
             </section>
