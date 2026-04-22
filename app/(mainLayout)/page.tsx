@@ -1,4 +1,5 @@
 
+import CtaSection from '@/components/CtaSection'
 import BlogSection from '@/components/pages/home/BlogSection'
 import Categories from '@/components/pages/home/CategorieSection'
 import FAQSection from '@/components/pages/home/FAQSection'
@@ -47,6 +48,9 @@ export default function Home() {
 
             {/* FAQ answering common questions */}
             <FAQSection />
+
+            {/* call to action section  */}
+            <CtaSection />
         </div>
     )
 }
