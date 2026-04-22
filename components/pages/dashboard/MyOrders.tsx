@@ -100,7 +100,7 @@ const MyOrders = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {orders.map(order => <tr key={order?._id}>
+                        {orders.map(order => <tr  key={order?._id}>
 
                             <td>
                                 <div className="flex items-center gap-3">
@@ -116,7 +116,7 @@ const MyOrders = () => {
                                     </div>
                                 </div>
                             </td>
-                            <td className='flex items-center gap-1'><FaBangladeshiTakaSign />{order.totalPrice}</td>
+                            <td className='flex items-center gap-1 '><FaBangladeshiTakaSign />{(order.totalPrice).toFixed(0) || 0}</td>
                             <td>Jan 8</td>
                             <td><span className={`badge badge-sm badge-soft ${order.status === 'pending' && "badge-warning"} ${order.status === 'cancelled' && "badge-error"} ${order?.status === "confirmed" && "badge-success"}`}>{order?.status}</span> </td>
                             <th>

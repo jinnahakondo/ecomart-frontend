@@ -40,7 +40,7 @@ export default function OrderDetailsModal({
                             <div>
                                 <h3 className="text-lg font-bold">{order.productId.title}</h3>
                                 <p className="text-sm text-gray-500">
-                                    Price: {order.price} × {order.quantity} = {order.totalPrice}
+                                    Price: {(order.price).toFixed(0) || 0} × {order.quantity} = {(order.totalPrice).toFixed(0) || 0}
                                 </p>
                                 <p className="text-sm">
                                     Status:{" "}

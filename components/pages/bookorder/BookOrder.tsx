@@ -3,7 +3,7 @@
 import { useAuth } from "@/lib/providers/AuthProvider";
 import { Product } from "@/lib/types/product";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   FaUser,
@@ -17,13 +17,10 @@ import {
   FaShoppingBag,
 } from "react-icons/fa";
 
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
-// types
+// Types
 type AddressForm = {
   fullName: string;
   phone: string;
@@ -31,6 +28,15 @@ type AddressForm = {
   city: string;
   area: string;
   postalCode: string;
+};
+
+type OrderPayload = {
+  userId: string;
+  productId: string;
+  quantity: number;
+  price: number;
+  totalPrice: number;
+  address: AddressForm;
 };
 
 export default function BookOrder() {
@@ -41,15 +47,18 @@ export default function BookOrder() {
   const queryClient = useQueryClient();
 
   const params = useSearchParams();
-  const productId = params.get("productId");
+  const productId = params.get("productId") || "";
 
-  // Product Fetch
+  // Product fetch
   const { data: productInfo, isLoading: isProductLoading } = useQuery({
     queryKey: ["book-order", productId],
     queryFn: async () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API}/products/${productId}`
       );
+
+      if (!res.ok) throw new Error("Failed to fetch product");
+
       const data = await res.json();
       return data.data as Product;
     },
@@ -64,25 +73,21 @@ export default function BookOrder() {
     formState: { errors },
   } = useForm<AddressForm>();
 
-  // Price Calculation
-  const price = useMemo(
-    () => Math.round(productInfo?.price ?? 0),
-    [productInfo]
-  );
+  // Pricing
+  const price = productInfo?.price ?? 0;
+  const totalPrice = quantity * price;
 
-  const totalPrice = useMemo(
-    () => quantity * price,
-    [quantity, price]
-  );
-
-  // Order Mutation
+  // Mutation
   const { mutate, isPending: isSubmitting } = useMutation({
-    mutationFn: async (orderData: any) => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
+    mutationFn: async (orderData: OrderPayload) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/orders`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       if (!res.ok) throw new Error("Order submission failed");
 
@@ -103,11 +108,16 @@ export default function BookOrder() {
     },
   });
 
-  // Submit Handler
+  // Submit
   const onSubmit = (formData: AddressForm) => {
-    if (!user || !productId) return;
+    if (!user) {
+      Swal.fire({
+        text: "please login to place order",
+      })
+      return;
+    }
 
-    const orderData = {
+    const orderData: OrderPayload = {
       userId: user._id,
       productId,
       quantity,
@@ -119,11 +129,20 @@ export default function BookOrder() {
     mutate(orderData);
   };
 
-  // Loading UI
+  // Loading
   if (isProductLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+        <span className="loading loading-spinner loading-lg text-primary" />
+      </div>
+    );
+  }
+
+  // Redirect if no productId
+  if (!productId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-error font-bold">Invalid product</p>
       </div>
     );
   }
@@ -138,11 +157,13 @@ export default function BookOrder() {
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="lg:col-span-8 space-y-6"
-          >
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid lg:grid-cols-12 gap-8 items-start"
+        >
+          {/* LEFT SIDE */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Shipping */}
             <div className="card bg-base-100 shadow-sm border border-base-300">
               <div className="card-body">
                 <h2 className="card-title mb-4">
@@ -168,10 +189,10 @@ export default function BookOrder() {
                     icon={<FaPhone />}
                     error={errors.phone?.message}
                     registration={register("phone", {
-                      required: "Phone number required",
+                      required: "Phone required",
                       pattern: {
                         value: /^01[3-9]\d{8}$/,
-                        message: "Invalid Bangladesh number",
+                        message: "Invalid number",
                       },
                     })}
                   />
@@ -181,7 +202,7 @@ export default function BookOrder() {
                     icon={<FaGlobe />}
                     error={errors.district?.message}
                     registration={register("district", {
-                      required: "District required",
+                      required: "Required",
                     })}
                   />
 
@@ -190,16 +211,16 @@ export default function BookOrder() {
                     icon={<FaCity />}
                     error={errors.city?.message}
                     registration={register("city", {
-                      required: "City required",
+                      required: "Required",
                     })}
                   />
 
                   <InputField
-                    label="Area / Street"
+                    label="Area"
                     icon={<FaMapMarkerAlt />}
                     error={errors.area?.message}
                     registration={register("area", {
-                      required: "Area required",
+                      required: "Required",
                     })}
                   />
 
@@ -208,17 +229,14 @@ export default function BookOrder() {
                     icon={<FaHashtag />}
                     error={errors.postalCode?.message}
                     registration={register("postalCode", {
-                      required: "Postal code required",
-                      minLength: {
-                        value: 4,
-                        message: "Invalid postal code",
-                      },
+                      required: "Required",
                     })}
                   />
                 </div>
               </div>
             </div>
 
+            {/* Quantity */}
             <div className="card bg-base-100 shadow-sm border border-base-300">
               <div className="card-body">
                 <h2 className="card-title mb-4">Quantity</h2>
@@ -240,7 +258,9 @@ export default function BookOrder() {
 
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => q + 1)}
+                    onClick={() =>
+                      setQuantity((q) => Math.min(99, q + 1))
+                    }
                     className="btn btn-ghost join-item"
                   >
                     <FaPlus size={10} />
@@ -248,9 +268,10 @@ export default function BookOrder() {
                 </div>
               </div>
             </div>
-          </form>
+          </div>
 
-          <aside className="lg:col-span-4 sticky top-6">
+          {/* RIGHT SIDE */}
+          <div className="lg:col-span-4 sticky top-6 self-start">
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
                 <h3 className="text-xl font-bold flex gap-2">
@@ -260,30 +281,30 @@ export default function BookOrder() {
 
                 <div className="space-y-3 mt-4">
                   <SummaryRow
-                    label="Price per unit"
-                    value={`৳ ${price}`}
+                    label="Price"
+                    value={`৳ ${price.toFixed(0)||0}`}
                   />
                   <SummaryRow
                     label="Quantity"
-                    value={`${quantity} units`}
+                    value={`${quantity}`}
                   />
                   <SummaryRow
                     label="Shipping"
                     value="Free"
                   />
 
-                  <div className="divider"></div>
+                  <div className="divider" />
 
                   <SummaryRow
                     label="Total"
-                    value={`৳ ${totalPrice}`}
+                    value={`৳ ${totalPrice.toFixed(0)||0}`}
                     bold
                   />
                 </div>
 
                 <button
-                  onClick={handleSubmit(onSubmit)}
-                  disabled={isSubmitting}
+                  type="submit"
+                  disabled={isSubmitting || !productInfo}
                   className="btn btn-primary w-full mt-8 h-14 text-lg"
                 >
                   {isSubmitting
@@ -292,15 +313,28 @@ export default function BookOrder() {
                 </button>
               </div>
             </div>
-          </aside>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );
 }
 
-// Input Component
-function InputField({ label, icon, registration, error }: any) {
+/* ---------------- INPUT ---------------- */
+
+type InputProps = {
+  label: string;
+  icon: React.ReactNode;
+  registration: any;
+  error?: string;
+};
+
+function InputField({
+  label,
+  icon,
+  registration,
+  error,
+}: InputProps) {
   return (
     <div className="form-control w-full">
       <label className="label py-1">
@@ -316,20 +350,21 @@ function InputField({ label, icon, registration, error }: any) {
 
         <input
           {...registration}
-          className={`input input-bordered w-full pl-12 bg-base-200/40 ${error ? "input-error" : "focus:input-primary"
+          className={`input input-bordered w-full pl-12 bg-base-200/40 ${error ? "input-error" : ""
             }`}
           placeholder={`Your ${label.toLowerCase()}`}
         />
       </div>
 
       <p className="text-error text-xs h-4 mt-1">
-        {error ?? ""}
+        {error}
       </p>
     </div>
   );
 }
 
-// Summary Row
+/* ---------------- SUMMARY ---------------- */
+
 function SummaryRow({
   label,
   value,
