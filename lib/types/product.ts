@@ -15,20 +15,26 @@ export type Review = {
 /*
   Product type
 */
+
+
 export type Product = {
-  _id: string;
-  title: string;
-  description: string;
-  category: string;
-  oldPrice: number;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  weight: number;
-  availabilityStatus: string;
-  thumbnail: string;
-  images: string[];
-  reviews: Review[];
-};
+  _id: string
+  title: string
+  description: string
+  category: string
+  oldPrice: number
+  price: number
+  discountPercentage: number
+  rating: number
+  stock: number
+  availabilityStatus: string
+  brand: string
+  weight: number
+  thumbnail: string
+  images: string[]
+  tags: string[]
+  warrantyInformation: string
+  returnPolicy: string
+  createdAt: string
+
+}

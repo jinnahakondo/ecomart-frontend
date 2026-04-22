@@ -1,225 +1,105 @@
-"use client";
-
+import { blogPosts } from "@/lib/data/blogData";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { FaArrowLeft, FaCalendar, FaUser } from "react-icons/fa6";
+import { FaArrowLeft, FaCalendar, FaUser, FaTag } from "react-icons/fa";
 
-export default function BlogPost({ params }: { params: { id: string } }) {
-    // Sample blog post data (in real app, fetch from API based on params.id)
-    const post = {
-        id: Number(params.id),
-        title: "Sustainable Shopping Trends 2024",
-        author: "Sarah Anderson",
-        date: "Apr 15, 2024",
-        category: "Lifestyle",
-        readTime: "5 min read",
-        image: "🌿",
-        content: `
-            <h2>Introduction</h2>
-            <p>The world of sustainable shopping is evolving rapidly. More and more consumers are becoming conscious of their environmental impact and making choices that align with their values. In 2024, we're seeing some exciting trends emerge in the world of eco-friendly shopping.</p>
+export default async function BlogPost({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const post = blogPosts.find(p => p.id === Number(id));
 
-            <h2>Trend 1: Local and Ethical Sourcing</h2>
-            <p>One of the biggest trends is the shift toward locally sourced and ethically produced products. Consumers are becoming increasingly interested in where their products come from and how they're made. Many brands are now focusing on transparency in their supply chains and highlighting their ethical practices.</p>
-
-            <h2>Trend 2: Circular Economy</h2>
-            <p>The circular economy is gaining momentum. Companies are designing products with durability and recyclability in mind. Return programs and product take-back initiatives are becoming more common, allowing customers to participate in the lifecycle of their purchases.</p>
-
-            <h2>Trend 3: Minimal Packaging</h2>
-            <p>Packaging waste is a major environmental concern, and brands are responding by minimizing packaging or using sustainable alternatives. Customers are also seeking out brands that offer minimal or zero-waste packaging options.</p>
-
-            <h2>Trend 4: Technology and Transparency</h2>
-            <p>Technology is playing an increasing role in sustainable shopping. QR codes, blockchain, and other technologies are being used to provide transparency about product origins, sustainability certifications, and environmental impact.</p>
-
-            <h2>Trend 5: Conscious Consumption</h2>
-            <p>Finally, there's a growing movement toward conscious consumption itself. More people are shopping less but buying better quality items that last longer. This shift away from fast fashion and throwaway culture is creating demand for durable, timeless products.</p>
-
-            <h2>Conclusion</h2>
-            <p>As we move forward in 2024, the sustainable shopping movement continues to strengthen. Whether you're just starting your sustainability journey or you're already a conscious consumer, there's never been a better time to make choices that benefit both you and the planet.</p>
-        `,
-        relatedPosts: [
-            { id: 2, title: "How to Care for Your Eco Products" },
-            { id: 5, title: "Sustainable Fashion Essentials" },
-        ],
-    };
-
-    return (
-        <main className="min-h-screen bg-base-100">
-            {/* Header Section */}
-            <section className="bg-gradient-to-br from-primary to-primary/60 text-white py-16">
-                <div className="max-w-7xl mx-auto px-4">
-                    <Link
-                        href="/blog"
-                        className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
-                    >
-                        <FaArrowLeft />
-                        Back to Blog
-                    </Link>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <div className="badge badge-lg badge-outline text-white border-white mb-4">
-                            {post.category}
-                        </div>
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                            {post.title}
-                        </h1>
-                        <div className="flex flex-wrap gap-6 text-white/90">
-                            <div className="flex items-center gap-2">
-                                <FaUser />
-                                <span>{post.author}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <FaCalendar />
-                                <span>{post.date}</span>
-                            </div>
-                            <span>{post.readTime}</span>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Featured Image */}
-            <section className="bg-gradient-to-br from-primary/20 to-secondary/20 py-12">
-                <div className="max-w-7xl mx-auto px-4">
-                    <div className="bg-base-200 rounded-xl h-96 flex items-center justify-center border border-primary/20">
-                        <span className="text-9xl">{post.image}</span>
+    if (!post) {
+        return (
+            <div className="hero min-h-[60vh] bg-base-200">
+                <div className="hero-content text-center">
+                    <div className="max-w-md">
+                        <h2 className="text-3xl font-bold">Post not found</h2>
+                        <Link href="/blog" className="btn btn-primary mt-4">
+                            <FaArrowLeft /> Back to Blogs
+                        </Link>
                     </div>
                 </div>
-            </section>
+            </div>
+        );
+    }
 
-            {/* Content Section */}
-            <section className="py-20">
-                <div className="max-w-4xl mx-auto px-4">
-                    <motion.div
-                        className="prose prose-lg max-w-none"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                    >
-                        <div className="space-y-6 text-base-content/80">
-                            <p>
-                                The world of sustainable shopping is evolving rapidly. More and more consumers are becoming conscious of their environmental impact and making choices that align with their values. In 2024, we're seeing some exciting trends emerge in the world of eco-friendly shopping.
-                            </p>
+    return (
+        <article className="max-w-4xl mx-auto px-4 py-12 md:py-20 animate-in fade-in duration-700 bg-base-100 text-base-content">
+            {/* Navigation */}
+            <Link
+                href="/blog"
+                className="btn btn-ghost btn-sm gap-2 mb-8 group normal-case"
+            >
+                <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+                Back to all posts
+            </Link>
 
-                            <h2 className="text-3xl font-bold text-base-content mt-8 mb-4">
-                                Trend 1: Local and Ethical Sourcing
-                            </h2>
-                            <p>
-                                One of the biggest trends is the shift toward locally sourced and ethically produced products. Consumers are becoming increasingly interested in where their products come from and how they're made. Many brands are now focusing on transparency in their supply chains and highlighting their ethical practices.
-                            </p>
+            {/* Header Section */}
+            <header className="space-y-6 mb-10">
+                <div className="badge badge-primary badge-outline gap-2 py-3">
+                    <FaTag size={10} />
+                    {post.category}
+                </div>
 
-                            <h2 className="text-3xl font-bold text-base-content mt-8 mb-4">
-                                Trend 2: Circular Economy
-                            </h2>
-                            <p>
-                                The circular economy is gaining momentum. Companies are designing products with durability and recyclability in mind. Return programs and product take-back initiatives are becoming more common, allowing customers to participate in the lifecycle of their purchases.
-                            </p>
+                <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tight text-base-content">
+                    {post.title}
+                </h1>
 
-                            <h2 className="text-3xl font-bold text-base-content mt-8 mb-4">
-                                Trend 3: Minimal Packaging
-                            </h2>
-                            <p>
-                                Packaging waste is a major environmental concern, and brands are responding by minimizing packaging or using sustainable alternatives. Customers are also seeking out brands that offer minimal or zero-waste packaging options.
-                            </p>
-
-                            <h2 className="text-3xl font-bold text-base-content mt-8 mb-4">
-                                Trend 4: Technology and Transparency
-                            </h2>
-                            <p>
-                                Technology is playing an increasing role in sustainable shopping. QR codes, blockchain, and other technologies are being used to provide transparency about product origins, sustainability certifications, and environmental impact.
-                            </p>
-
-                            <h2 className="text-3xl font-bold text-base-content mt-8 mb-4">
-                                Trend 5: Conscious Consumption
-                            </h2>
-                            <p>
-                                Finally, there's a growing movement toward conscious consumption itself. More people are shopping less but buying better quality items that last longer. This shift away from fast fashion and throwaway culture is creating demand for durable, timeless products.
-                            </p>
-
-                            <h2 className="text-3xl font-bold text-base-content mt-8 mb-4">
-                                Conclusion
-                            </h2>
-                            <p>
-                                As we move forward in 2024, the sustainable shopping movement continues to strengthen. Whether you're just starting your sustainability journey or you're already a conscious consumer, there's never been a better time to make choices that benefit both you and the planet.
-                            </p>
-                        </div>
-                    </motion.div>
-
-                    {/* Divider */}
-                    <div className="divider my-12" />
-
-                    {/* Author Bio */}
-                    <motion.div
-                        className="bg-base-200 rounded-xl p-8 mb-12"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <h3 className="text-2xl font-bold text-base-content mb-3">
-                            About the Author
-                        </h3>
-                        <p className="text-base-content/70">
-                            {post.author} is a sustainability expert and passionate advocate for eco-friendly living. With over 10 years of experience in environmental writing, Sarah shares insights about sustainable shopping and green lifestyle choices.
-                        </p>
-                    </motion.div>
-
-                    {/* Related Posts */}
-                    {post.relatedPosts.length > 0 && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <h3 className="text-3xl font-bold text-base-content mb-8">
-                                Related Articles
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {post.relatedPosts.map((relatedPost) => (
-                                    <Link
-                                        key={relatedPost.id}
-                                        href={`/blog/${relatedPost.id}`}
-                                        className="card bg-base-200 shadow-lg border border-primary/10 hover:border-primary/30 overflow-hidden transition-all hover:shadow-xl p-6"
-                                    >
-                                        <h4 className="text-lg font-bold text-base-content hover:text-primary transition-colors">
-                                            {relatedPost.title}
-                                        </h4>
-                                    </Link>
-                                ))}
+                <div className="flex flex-wrap items-center gap-6 text-sm opacity-70 border-b border-base-300 pb-8">
+                    <div className="flex items-center gap-2">
+                        <div className="avatar placeholder">
+                            <div className="bg-neutral text-neutral-content rounded-full w-8">
+                                <FaUser size={14} />
                             </div>
-                        </motion.div>
-                    )}
+                        </div>
+                        <span className="font-bold">{post.author}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <FaCalendar />
+                        <span>{post.date}</span>
+                    </div>
                 </div>
-            </section>
+            </header>
 
-            {/* CTA Section */}
-            <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
-                <div className="max-w-7xl mx-auto px-4 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <h2 className="text-4xl font-bold mb-4">
-                            Ready to Make a Difference?
-                        </h2>
-                        <p className="text-xl text-white/90 mb-8">
-                            Explore our sustainable products and start your eco-friendly journey today.
-                        </p>
-                        <Link
-                            href="/products"
-                            className="btn btn-lg btn-outline text-white border-white hover:bg-white hover:text-primary hover:border-white"
-                        >
-                            Shop Now
-                        </Link>
-                    </motion.div>
+            {/* Featured Image */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-3xl shadow-xl mb-12">
+                <img
+                    src={post.image}
+                    alt={post.title}
+                    className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
+                />
+            </div>
+
+            {/* Post Content */}
+            <div className="prose prose-lg max-w-none prose-headings:text-base-content prose-p:text-base-content/80 prose-strong:text-base-content">
+                <p className="text-xl leading-relaxed italic mb-8 border-l-4 border-primary pl-6 text-base-content/90">
+                    {post.excerpt}
+                </p>
+
+                <div className="space-y-6">
+                    <p>
+                        In today's fast-paced world, finding balance is more important than ever.
+                        Modern living often pulls us in a thousand directions, but adopting
+                        sustainable habits can ground us and provide a sense of purpose.
+                    </p>
+                    <h2 className="text-2xl font-bold">Why Sustainability Matters</h2>
+                    <p>
+                        It's not just about the environment; it's about personal well-being.
+                        When we choose products and habits that are better for the planet,
+                        we often find they are better for our health and our wallets too.
+                    </p>
                 </div>
-            </section>
-        </main>
+            </div>
+
+            {/* Footer / Share Placeholder */}
+            <footer className="mt-16 pt-8 border-t border-base-300 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="text-sm opacity-60 text-center md:text-left">
+                    Enjoyed this read? Share it with your network.
+                </div>
+                <div className="flex gap-2">
+                    <button className="btn btn-circle btn-outline btn-sm">f</button>
+                    <button className="btn btn-circle btn-outline btn-sm">t</button>
+                    <button className="btn btn-circle btn-outline btn-sm">in</button>
+                </div>
+            </footer>
+        </article>
     );
 }
