@@ -15,8 +15,8 @@ const slides = [
         image:
             'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=1200&q=80',
         discount: '30% OFF',
-        cta: 'Shop Electronics',
-        link: '/shop?category=Electronics',
+        cta: 'Shop Now',
+        link: '/products',
     },
     {
         id: 2,
@@ -26,7 +26,7 @@ const slides = [
             'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80',
         discount: '50% OFF',
         cta: 'Explore Fashion',
-        link: '/shop?category=Fashion',
+        link: '/products?category=womens-dresses',
     },
     {
         id: 3,
@@ -35,8 +35,8 @@ const slides = [
         image:
             'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=1200&q=80',
         discount: '40% OFF',
-        cta: 'Shop Furniture',
-        link: '/shop?category=Furniture',
+        cta: 'Explore Decoration',
+        link: '/products?category=home-decoration',
     },
 ];
 
