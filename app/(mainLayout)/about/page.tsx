@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import Link from 'next/link'
 import { motion } from "framer-motion";
 import { FaLeaf, FaHandshake, FaStar, FaArrowRight } from "react-icons/fa6";
 import { FaGlobeAmericas } from "react-icons/fa";
+
 
 export default function About() {
     const values = [
@@ -59,24 +60,58 @@ export default function About() {
     return (
         <main className="min-h-screen bg-base-100">
             {/* Header Section */}
-            <section className="bg-gradient-to-br from-primary to-primary/60 text-white py-20">
-                <div className="max-w-7xl mx-auto px-4 text-center">
+            <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden">
+                {/* Unsplash Background Image */}
+                <div
+                    className="absolute inset-0 z-0"
+                    style={{
+                        backgroundImage: `url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=2000')`,
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                    }}
+                >
+                    {/* Overlay - ব্লার ছাড়া শুধু ডার্ক লেয়ার যাতে টেক্সট ক্লিয়ার থাকে */}
+                    <div className="absolute inset-0 bg-black/60"></div>
+                </div>
+
+                {/* Content Container */}
+                <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 text-center">
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8 }}
                     >
-                        <h1 className="text-5xl md:text-6xl font-bold mb-4">
-                            About Ecomart
+                        {/* Mission Badge */}
+                        <span className="inline-block px-5 py-1.5 mb-6 text-xs font-bold tracking-[0.2em] uppercase border border-primary text-primary rounded-md">
+                            Our Journey
+                        </span>
+
+                        {/* Main Heading */}
+                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
+                            About <span className="text-primary">Ecomart</span>
                         </h1>
-                        <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                            Building a sustainable future through conscious shopping and eco-friendly products
+
+                        {/* Subtext */}
+                        <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed font-medium mb-10">
+                            We are building a sustainable future through conscious shopping.
+                            Our mission is to bring high-quality, eco-friendly products into every home,
+                            making green living a standard, not an option.
                         </p>
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-col sm:flex-row justify-center gap-4">
+                            <Link href={'/blog'} className="btn btn-primary btn-lg rounded-md px-10 shadow-lg">
+                                Our Blog
+                            </Link>
+                            <Link href={"/contact"} className="btn btn-outline btn-lg rounded-md px-10 text-white border-white hover:bg-white hover:text-black">
+                                Contact Us
+                            </Link>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
-            {/* Our Story Section */}
+            {/* Our blog Section */}
             <section className="py-20">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -87,7 +122,7 @@ export default function About() {
                             transition={{ duration: 0.6 }}
                         >
                             <h2 className="text-4xl font-bold text-base-content mb-6">
-                                Our Story
+                                Our Blog
                             </h2>
                             <p className="text-base-content/70 text-lg leading-relaxed mb-4">
                                 Ecomart was born from a simple idea: making sustainable shopping accessible to everyone. We believed that conscious consumption shouldn't be a luxury, but a standard practice.
