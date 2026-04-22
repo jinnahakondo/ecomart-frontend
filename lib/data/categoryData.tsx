@@ -1,5 +1,5 @@
 export const categoryData = [
-    "all products", "beauty",
+    "beauty",
     "fragrances",
     "furniture",
     "groceries",

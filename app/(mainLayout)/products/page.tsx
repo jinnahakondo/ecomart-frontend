@@ -1,7 +1,6 @@
 import ProductCard from "@/components/cards/ProductCard"
 import Pagination from "@/components/pages/products/Pagination"
 import ProductFilterSidebar from "@/components/pages/products/ProductFilter"
-import ProductPageHeader from "@/components/pages/products/ProductPageHeader"
 import { Product } from "@/lib/types/product"
 
 const getProducts = async (search: string, category: string, sort: string, skip: number, limit: number) => {
@@ -12,7 +11,9 @@ const getProducts = async (search: string, category: string, sort: string, skip:
         skip: skip.toString(),
         limit: limit.toString()
     });
-    const res = await fetch(`${process.env.API}/products?${params.toString()}`)
+    const res = await fetch(`${process.env.API}/products?${params.toString()}`, {
+        next: { revalidate: 60 }
+    })
     const data = await res.json();
     return data;
 }
@@ -32,7 +33,7 @@ export default async function Products({ searchParams }: Props) {
     const category = params.category || "";
     const sort = params.sort || "";
     const skip = parseInt(params.skip || "0");
-    const limit = 12; // items per page
+    const limit = 12;
 
     const { data: products, total } = await getProducts(search, category, sort, skip, limit)
     const totalPages = Math.ceil(total / limit);
@@ -47,8 +48,6 @@ export default async function Products({ searchParams }: Props) {
                 {/* Main Content */}
                 <div className="lg:col-span-3 space-y-6">
 
-                    {/* Header */}
-                    <ProductPageHeader />
                     {/* Product Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
