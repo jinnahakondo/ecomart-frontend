@@ -78,3 +78,18 @@
 1. **Clone Repo:**
    ```bash
    git clone git@github.com:jinnahakondo/ecomart-frontend.git
+   ```
+
+   Install Deps:
+
+```bash
+npm install
+Environment Setup:
+Create .env.local and add NEXT_PUBLIC_API_URL and NEXT_PUBLIC_GEMINI_API_KEY.
+```
+
+3. Run Project:
+
+```bash
+npm run dev
+```
