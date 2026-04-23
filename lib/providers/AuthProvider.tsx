@@ -19,7 +19,7 @@ export default function AuthProvider({
   const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     const getUser = async () => {
@@ -33,7 +33,7 @@ export default function AuthProvider({
         );
 
         const result = await res.json();
-        console.log("result form auth provider", result)
+        // console.log("result form auth provider", result)
 
         if (res.ok) {
           setUser(result.data);

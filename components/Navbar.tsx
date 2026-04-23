@@ -8,6 +8,7 @@ import NavLink from "./NavLink/NavLink";
 import { useAuth } from "@/lib/providers/AuthProvider";
 import AuthModal from "./modal/AuthModal";
 import { useRef } from "react";
+import Logo from "./Logo";
 
 export default function Navbar() {
     // auth state from context
@@ -128,19 +129,8 @@ export default function Navbar() {
                         </ul>
                     </div>
 
-                    <Link
-                        href="/"
-                        className="btn btn-ghost gap-3 text-primary pl-0 normal-case"
-                    >
-                        <Image
-                            src="/logo.svg"
-                            alt="Ecomart logo"
-                            width={36}
-                            height={36}
-                            className="rounded-full"
-                        />
-                        <span className="text-xl font-semibold">Ecomart</span>
-                    </Link>
+                    {/* logo  */}
+                    <Logo />
                 </div>
 
                 {/* desktop menu */}

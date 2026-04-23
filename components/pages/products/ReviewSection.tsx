@@ -13,7 +13,7 @@ type ReviewSectionProps = {
 };
 
 export default function ReviewSection({ id }: ReviewSectionProps) {
-  console.log(id);
+  // console.log(id);
 
   const reviewModalRef = React.useRef<HTMLDialogElement>(null);
 

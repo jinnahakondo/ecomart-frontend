@@ -19,35 +19,20 @@ import {
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import { AddressForm, OrderPayload } from "@/lib/types/bookOrder";
 
-// Types
-type AddressForm = {
-  fullName: string;
-  phone: string;
-  district: string;
-  city: string;
-  area: string;
-  postalCode: string;
-};
-
-type OrderPayload = {
-  userId: string;
-  productId: string;
-  quantity: number;
-  price: number;
-  totalPrice: number;
-  address: AddressForm;
-};
 
 export default function BookOrder() {
   const [quantity, setQuantity] = useState(1);
 
   const { user } = useAuth();
+
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const params = useSearchParams();
   const productId = params.get("productId") || "";
+
+  const queryClient = useQueryClient();
 
   // Product fetch
   const { data: productInfo, isLoading: isProductLoading } = useQuery({
@@ -77,7 +62,7 @@ export default function BookOrder() {
   const price = productInfo?.price ?? 0;
   const totalPrice = quantity * price;
 
-  // Mutation
+  //create a order 
   const { mutate, isPending: isSubmitting } = useMutation({
     mutationFn: async (orderData: OrderPayload) => {
       const res = await fetch(
@@ -89,14 +74,28 @@ export default function BookOrder() {
         }
       );
 
-      if (!res.ok) throw new Error("Order submission failed");
+      // console.log("response order:", res);
+
+      if (!res.ok) {
+        Swal.fire({
+          icon: "error",
+          text: "Something went wrong!"
+        })
+        throw new Error("Something went wrong");
+      }
 
       return res.json();
     },
 
     onSuccess: () => {
+
       setQuantity(1);
       reset();
+
+      Swal.fire({
+        icon: "success",
+        text: "Order placed successfully"
+      })
 
       queryClient.invalidateQueries({ queryKey: ["my-orders"] });
 
@@ -125,6 +124,8 @@ export default function BookOrder() {
       totalPrice,
       address: formData,
     };
+
+    // console.log("order data:", orderData);
 
     mutate(orderData);
   };
@@ -282,7 +283,7 @@ export default function BookOrder() {
                 <div className="space-y-3 mt-4">
                   <SummaryRow
                     label="Price"
-                    value={`৳ ${price.toFixed(0)||0}`}
+                    value={`৳ ${price.toFixed(0) || 0}`}
                   />
                   <SummaryRow
                     label="Quantity"
@@ -297,7 +298,7 @@ export default function BookOrder() {
 
                   <SummaryRow
                     label="Total"
-                    value={`৳ ${totalPrice.toFixed(0)||0}`}
+                    value={`৳ ${totalPrice.toFixed(0) || 0}`}
                     bold
                   />
                 </div>

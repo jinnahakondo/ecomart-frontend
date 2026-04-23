@@ -1,13 +1,25 @@
 
+import dynamic from 'next/dynamic'
+
+const FeaturesSection = dynamic(() => import("@/components/pages/home/FeaturesSection"), {
+    loading: () => <p className="text-center py-12">Loading features...</p>
+})
+const PopularProducts = dynamic(() => import("@/components/pages/home/PopularProducts"), {
+    loading: () => <p className="text-center py-12">Loading popular products...</p>
+})
+
+const LatestProducts = dynamic(() => import("@/components/pages/home/LatestProducts"), {
+    loading: () => <p className="text-center py-12">Loading latest products...</p>
+})
+const BlogSection = dynamic(() => import("@/components/pages/home/BlogSection"), {
+    loading: () => <p className="text-center py-12">Loading blog posts...</p>
+})
+
 import CtaSection from '@/components/CtaSection'
-import BlogSection from '@/components/pages/home/BlogSection'
 import Categories from '@/components/pages/home/CategorieSection'
 import FAQSection from '@/components/pages/home/FAQSection'
 import FeaturedProducts from '@/components/pages/home/FeaturedProducts'
-import FeaturesSection from '@/components/pages/home/FeaturesSection'
 import Hero from '@/components/pages/home/Hero'
-import LatestProducts from '@/components/pages/home/LatestProducts'
-import PopularProducts from '@/components/pages/home/PopularProducts'
 import SpecialOffers from '@/components/pages/home/SpecialOffers'
 import Statistics from '@/components/pages/home/Statistics'
 import TestimonialSection from '@/components/pages/home/TestimonialSection'

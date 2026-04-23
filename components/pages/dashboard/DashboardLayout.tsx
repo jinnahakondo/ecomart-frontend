@@ -1,5 +1,5 @@
 "use client"
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/LoadingComponent";
 import NavLink from "@/components/NavLink/NavLink";
 import React from "react";
 import {
@@ -13,6 +13,7 @@ import { LuUsers } from "react-icons/lu";
 import { MdOutlineInventory2 } from "react-icons/md";
 import Link from "next/link";
 import { useAuth } from "@/lib/providers/AuthProvider";
+import Logo from "@/components/Logo";
 
 
 export default function DashboardLayout({
@@ -107,8 +108,8 @@ export default function DashboardLayout({
                     <aside className="w-64 min-h-full bg-base-200 flex flex-col">
 
                         {/* logo / title */}
-                        <div className="p-5 font-semibold text-xl">
-                            <h2 className="font-bold text-xl"><Link href={'/'} className="text-primary">Eco</Link>Mart</h2>
+                        <div className="p-5 ">
+                           <Logo/>
                         </div>
 
                         {/* menu */}
