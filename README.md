@@ -17,8 +17,8 @@
 ### 🔑 Demo Accounts
 | Role | Email | Password |
 | :--- | :--- | :--- |
-| **Admin** | `admin@gmail.com` | `@1234` |
-| **User** | `user@gmail.com` | `Asdf` |
+| **Admin** | `admin@gmail.com` | `Asdf@1234` |
+| **User** | `user@gmail.com` | `Asdf@1234`` |
 
 ---
 
