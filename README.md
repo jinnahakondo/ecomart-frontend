@@ -20,15 +20,13 @@
 **Ecomart** is a robust e-commerce solution designed with real-world production patterns. It bridges the gap between traditional retail and modern AI, utilizing the **Google Gemini API** to enhance user engagement and automate store management.
 
 ### 🤖 AI-Powered Capabilities
-- **Smart Chat Assistant:** Context-aware customer support powered by Gemini.
 - **Auto-Content Generation:** Instantly creates professional product descriptions for admins.
-- **Review Summarization:** AI-driven summaries of customer feedback for quick decision-making.
 
 ---
 
 ## 🏗️ System Architecture
 The application follows a **decoupled Client-Server** architecture to ensure performance and maintainability:
-1. **Frontend:** SSR/ISR optimized SPA built with **Next.js 15**.
+1. **Frontend:** SSR/SSG optimized SPA built with **Next.js 16**.
 2. **Backend:** RESTful API with middleware-based **JWT validation** and RBAC.
 3. **Database:** Scalable NoSQL storage using **MongoDB Atlas**.
 4. **AI Layer:** Seamless integration with **Google Generative AI** services.
@@ -42,13 +40,13 @@ The application follows a **decoupled Client-Server** architecture to ensure per
 - **State Management:** TanStack Query (React Query)
 - **Styling:** Tailwind CSS & DaisyUI
 - **Animations:** Framer Motion
-- **Icons:** Lucide-React
+- **Icons:** Lucide-React/React-Icons
+- **Form validation:** React Hook Form
 
 ### Backend
 - **Runtime:** Node.js & Express.js
 - **Database:** MongoDB & Mongoose
 - **Security:** JWT (JSON Web Tokens), bcrypt.js, Cookie-parser
-- **Validation:** Zod
 
 ---
 
