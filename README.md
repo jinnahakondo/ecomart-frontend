@@ -6,72 +6,75 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 
-> A production-grade, full-stack e-commerce ecosystem featuring AI-driven insights, scalable MERN architecture, and a seamless modern UX.
+> A production-grade, full-stack e-commerce platform with AI integration, built using the MERN stack and modern UX principles.
 
 ---
 
-## 🔗 Live Links
-- 🌐 **Frontend:** [ecomart-frontend-three.vercel.app](https://ecomart-frontend-three.vercel.app/)
+## 🔗 Live Demo & Credentials
+- 🌐 **Live Website:** [ecomart-frontend-three.vercel.app](https://ecomart-frontend-three.vercel.app/)
 - 🔧 **Backend API:** [ecomart-backend-mu.vercel.app](https://ecomart-backend-mu.vercel.app/)
+
+### 🔑 Demo Accounts
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@example.com` | `123456` |
+| **User** | `user@example.com` | `123456` |
 
 ---
 
 ## 📌 Project Overview
-**Ecomart** is a robust e-commerce solution designed with real-world production patterns. It bridges the gap between traditional retail and modern AI, utilizing the **Google Gemini API** to enhance user engagement and automate store management.
+**Ecomart** simulates an enterprise-level e-commerce architecture. It features a clean, responsive UI with Light/Dark mode, a robust role-based dashboard, and intelligent automation powered by the **Google Gemini API**.
 
-### 🤖 AI-Powered Capabilities
-- **Auto-Content Generation:** Instantly creates professional product descriptions for admins.
+### 🤖 AI Integration Features
+- **AI Content Generator:** Automatically generates professional product descriptions.
 
 ---
 
 ## 🏗️ System Architecture
-The application follows a **decoupled Client-Server** architecture to ensure performance and maintainability:
-1. **Frontend:** SSR/SSG optimized SPA built with **Next.js 16**.
-2. **Backend:** RESTful API with middleware-based **JWT validation** and RBAC.
-3. **Database:** Scalable NoSQL storage using **MongoDB Atlas**.
-4. **AI Layer:** Seamless integration with **Google Generative AI** services.
 
----
 
-## ⚙️ Tech Stack
-
-### Frontend
-- **Framework:** Next.js (App Router) & TypeScript
-- **State Management:** TanStack Query (React Query)
-- **Styling:** Tailwind CSS & DaisyUI
-- **Animations:** Framer Motion
-- **Icons:** Lucide-React/React-Icons
-- **Form validation:** React Hook Form
-
-### Backend
-- **Runtime:** Node.js & Express.js
-- **Database:** MongoDB & Mongoose
-- **Security:** JWT (JSON Web Tokens), bcrypt.js, Cookie-parser
+1. **Frontend:** SSR/SSG optimized with **Next.js 16+** and **TypeScript**.
+2. **Backend:** RESTful API using **Express.js** with secure **JWT** middleware.
+3. **Database:** Scalable storage with **MongoDB Atlas** and **Mongoose** modeling.
+4. **Security:** Role-Based Access Control (RBAC) and HTTP-only cookie authentication.
 
 ---
 
 ## ✨ Key Features
 
-### 🛍️ E-Commerce Core
-- **Smart Discovery:** Advanced multi-criteria filtering, instant search, and sorting.
-- **Optimized Performance:** Efficient pagination and data caching with React Query.
-- **Dynamic UX:** Fully responsive design with smooth layout transitions.
+### 🛍️ Frontend Excellence
+- **Modern UI:** Clean card designs, loaders, and Framer Motion animations.
+- **Advanced Discovery:** Search, multi-category filtering, and dynamic sorting.
+- **Responsive Design:** Optimized for Mobile, Tablet, and Desktop.
+- **Theme Support:** Fully functional Light and Dark modes.
 
-### 🛡️ Security & Roles
-- **Auth:** Secure JWT-based authentication using **HTTP-only cookies**.
-- **RBAC:** Strictly enforced **User** and **Admin** dashboard permissions.
-- **Data Protection:** Password hashing and request payload validation.
+### 🛡️ Secure Backend & RBAC
+- **Auth System:** JWT, bcrypt password hashing
+- **Admin Dashboard (5+ Pages):** Inventory management, User control, and Analytics.
+- **User Dashboard (5+ Pages):** Order tracking, Profile management, and Review history.
 
-### 📊 Admin Intelligence
-- **Real-time Analytics:** Visual tracking of total users, revenue, and order trends.
-- **Chart Insights:** Interactive data visualization (Bar, Line, and Pie charts).
-- **Store Management:** Comprehensive CRUD operations for products and orders.
+### 📊 Dashboard & Analytics
+- **Visual Insights:** Dynamic Bar, Line, and Pie charts using real-time store data.
+- **Statistics:** Overview cards for Total Revenue, Orders, and User growth.
 
 ---
 
-## 🚀 Local Setup
+## ⚙️ Tech Stack
 
-1. **Clone the repository:**
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | Next.js (App Router), TypeScript, Tailwind CSS, TanStack Query |
+| **Backend** | Node.js, Express.js, TypeScript |
+| **Database** | MongoDB, Mongoose |
+| **AI Services** | Google Gemini API |
+| **Authentication** | JWT, bcrypt.js, Cookie-parser |
+| **Deployment** | Vercel 
+
+
+---
+
+## 💻 Local Setup
+
+1. **Clone Repo:**
    ```bash
    git clone git@github.com:jinnahakondo/ecomart-frontend.git
-   cd ecomart-frontend
