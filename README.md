@@ -77,7 +77,7 @@
 
 1. **Clone Repo:**
 ```bash
-   git clone git@github.com:jinnahakondo/ecomart-frontend.git
+git clone git@github.com:jinnahakondo/ecomart-frontend.git
 ```
 
 2. Install Deps:
