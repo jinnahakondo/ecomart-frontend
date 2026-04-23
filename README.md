@@ -76,9 +76,9 @@
 ## 💻 Local Setup
 
 1. **Clone Repo:**
-   ```bash
+```bash
    git clone git@github.com:jinnahakondo/ecomart-frontend.git
-   ```
+```
 
 2. Install Deps:
 
