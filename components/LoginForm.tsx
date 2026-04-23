@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa6";
 import { useAuth } from "@/lib/providers/AuthProvider";
+import Swal from "sweetalert2";
 
 interface Props {
     modalRef: React.RefObject<HTMLDialogElement | null>;
@@ -46,6 +46,10 @@ export default function LoginForm({ modalRef, setIsLogin }: Props) {
 
 
             if (!res.ok) {
+                Swal.fire({
+                    icon: "error",
+                    text: "Something went wrong"
+                })
                 throw new Error("Login failed");
             }
 
@@ -56,6 +60,11 @@ export default function LoginForm({ modalRef, setIsLogin }: Props) {
 
         } catch (error: any) {
             setServerError(error.message || "Something went wrong");
+            Swal.fire({
+                icon: "error",
+                text: error?.message
+            })
+            
         } finally {
             setLoading(false);
             modalRef.current?.close()
