@@ -7,8 +7,9 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { blogPosts } from "@/lib/data/blogData";
 import BlogCard from "@/components/cards/BlogCard";
+import CtaSection from "@/components/CtaSection";
 
-export default function Blog() {
+export default function Blogs() {
 
     const bgImage = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80";
 
@@ -38,7 +39,7 @@ export default function Blog() {
                         backgroundSize: 'cover',
                     }}
                 >
-                    {/* DaisyUI Overlay - টেক্সট স্পষ্টভাবে পড়ার জন্য */}
+                    {/*  Overlay  */}
                     <div className="absolute inset-0 bg-neutral/70 backdrop-blur-[1px]"></div>
                 </div>
 
@@ -61,16 +62,6 @@ export default function Blog() {
                         <p className="text-lg md:text-xl text-neutral-content/80 max-w-2xl mx-auto leading-relaxed mb-10">
                             Discover practical tips, expert guides, and inspiring stories designed to help you build a more sustainable and eco-friendly home.
                         </p>
-
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <button className="btn btn-primary btn-lg rounded-full px-10 shadow-lg border-none text-white">
-                                Start Reading
-                            </button>
-                            <button className="btn btn-outline btn-lg rounded-full px-10 text-white hover:bg-white hover:text-black transition-all">
-                                All Categories
-                            </button>
-                        </div>
                     </motion.div>
                 </div>
             </section>
@@ -147,34 +138,9 @@ export default function Blog() {
                 </div>
             </section>
 
-            {/* Newsletter CTA */}
-            <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
-                <div className="max-w-7xl mx-auto px-4 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <h2 className="text-4xl font-bold mb-4">
-                            Subscribe to Our Newsletter
-                        </h2>
-                        <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                            Get the latest blog posts and sustainability tips delivered to your inbox
-                        </p>
-                        <div className="flex gap-3 flex-col sm:flex-row max-w-md mx-auto">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="input input-bordered flex-1 bg-white text-base-content"
-                            />
-                            <button className="btn btn-base-100 text-primary font-bold whitespace-nowrap">
-                                Subscribe
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
+            {/* CTA Buttons */}
+            <CtaSection />
+
         </main>
     );
 }

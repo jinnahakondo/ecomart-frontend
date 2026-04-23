@@ -47,7 +47,7 @@ export default function Home() {
             <LatestProducts />
 
             {/* Special promotional offers */}
-            <SpecialOffers />
+            {/* <SpecialOffers /> */}
 
             {/* Latest blog content */}
             <BlogSection />

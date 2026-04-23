@@ -59,7 +59,7 @@ export default function BlogCard({ post }: Props) {
 
                 <div className="card-actions justify-end mt-4">
                     <NextLink
-                        href={`/blog/${post.id}`}
+                        href={`/blogs/${post.id}`}
                         className="btn btn-sm btn-primary btn-outline group"
                     >
                         Read More

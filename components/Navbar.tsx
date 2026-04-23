@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaCartShopping } from "react-icons/fa6";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaArrowRightFromBracket, FaGear, FaLayout } from "react-icons/fa6";
 import NavLink from "./NavLink/NavLink";
 import { useAuth } from "@/lib/providers/AuthProvider";
 import AuthModal from "./modal/AuthModal";
@@ -11,146 +10,115 @@ import { useRef } from "react";
 import Logo from "./Logo";
 
 export default function Navbar() {
-    // auth state from context
     const { user, loading, setUser } = useAuth();
+    const modalRef = useRef<HTMLDialogElement | null>(null);
 
-    const modalRef = useRef<HTMLDialogElement | null>(null)
-
-    // logout user and update UI instantly
     const handleLogout = async () => {
         try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API}/auth/logout`,
-                {
-                    method: "POST",
-                    credentials: "include",
-                }
-            );
-
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
             const result = await res.json();
-
-            if (result.success) {
-                setUser(null);
-            }
+            if (result.success) setUser(null);
         } catch (error) {
             console.error("Logout failed", error);
         }
     };
 
-    // navigation links
     const navLinks = (
         <>
             <li><NavLink href="/">Home</NavLink></li>
-            <li><NavLink href="/products">Products</NavLink></li>
+            <li><NavLink href="/products">Shop</NavLink></li>
+            <li><NavLink href="/blogs">Blogs</NavLink></li>
             <li><NavLink href="/about">About</NavLink></li>
             <li><NavLink href="/contact">Contact</NavLink></li>
-            <li><NavLink href="/blog">Blog</NavLink></li>
-            {!user && <li><button onClick={() => {
-                modalRef.current?.showModal()
-            }}>Login</button></li>}
 
             {user && (
                 <li>
-                    <NavLink href={`/dashboard${user?.role === "admin" && "/admin" || user?.role === "user" && "/user"}`}>Dashboard</NavLink>
+                    <NavLink href={`/dashboard/${user?.role === "admin" ? "admin" : "user"}`}>
+                        Dashboard
+                    </NavLink>
                 </li>
             )}
         </>
     );
 
-    // right-side auth UI
     const renderAuthSection = () => {
-        if (loading) {
-            return <span className="loading loading-spinner loading-sm" />;
-        }
+        if (loading) return <span className="loading loading-spinner loading-sm opacity-50" />;
 
         if (user) {
             return (
-                <div className="flex items-center gap-3">
-                    {user.avatar && (
-                        <Image
-                            src={user.avatar}
-                            alt="User avatar"
-                            width={36}
-                            height={36}
-                            className="rounded-full"
-                        />
-                    )}
-
-                    <button
-                        onClick={handleLogout}
-                        className="btn btn-ghost"
-                    >
-                        Logout
-                    </button>
+                <div className="dropdown dropdown-end">
+                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar border-2 border-primary/20 p-0.5 hover:border-primary transition-all">
+                        <div className="w-9 rounded-full ring ring-offset-base-100 ring-offset-2 ring-primary/10">
+                            <Image
+                                src={user.avatar || "https://i.ibb.co/v3X7699/user-placeholder.png"}
+                                alt="Profile"
+                                width={40}
+                                height={40}
+                            />
+                        </div>
+                    </div>
+                    <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-2xl z-[100] mt-3 w-64 p-3 shadow-xl border border-base-200">
+                        <li className="px-4 py-3 border-b border-base-200 mb-2">
+                            <p className="font-bold text-sm block truncate">{user.name || "User"}</p>
+                            <p className="text-[11px] opacity-60 block truncate">{user.email}</p>
+                        </li>
+                        <li>
+                            <button className="py-2.5">
+                                <FaGear className="opacity-70" /> Settings
+                            </button>
+                        </li>
+                        <li>
+                            <button onClick={handleLogout} className="py-2.5 text-error hover:bg-error/10">
+                                <FaArrowRightFromBracket /> Logout
+                            </button>
+                        </li>
+                    </ul>
                 </div>
             );
         }
 
         return (
-            <>
-                <FaUser size={22} />
-            </>
+            <button
+                onClick={() => modalRef.current?.showModal()}
+                className="btn btn-primary btn-sm px-6 rounded-full text-white shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+            >
+                Sign In
+            </button>
         );
     };
 
     return (
-        <div className="bg-base-100 shadow-sm">
-            <div className="navbar max-w-7xl mx-auto">
-
-                {/* mobile menu */}
+        <header className="sticky top-0 z-[50] w-full border-b border-base-200 bg-base-100/80 backdrop-blur-md">
+            <nav className="navbar max-w-7xl mx-auto px-4 min-h-[4.5rem]">
                 <div className="navbar-start">
-                    <div className="dropdown">
-                        <div
-                            tabIndex={0}
-                            role="button"
-                            className="btn btn-ghost lg:hidden pl-0"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h8m-8 6h16"
-                                />
+                    {/* Mobile Menu */}
+                    <div className="dropdown lg:hidden">
+                        <label tabIndex={0} className="btn btn-ghost btn-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
                             </svg>
-                        </div>
-
-                        <ul
-                            tabIndex={-1}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow main-navbar"
-                        >
+                        </label>
+                        <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow-2xl border border-base-200">
                             {navLinks}
                         </ul>
                     </div>
-
-                    {/* logo  */}
                     <Logo />
                 </div>
 
-                {/* desktop menu */}
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal main-navbar">
+                    <ul className="menu menu-horizontal px-1 gap-2 font-medium">
                         {navLinks}
                     </ul>
                 </div>
 
-                {/* right section */}
-                <div className="navbar-end gap-6">
-                    <Link href="/">
-                        <FaCartShopping size={24} />
-                    </Link>
-
+                <div className="navbar-end gap-2">
                     {renderAuthSection()}
                 </div>
-            </div>
-            {/* modal */}
+            </nav>
             <AuthModal modalRef={modalRef} />
-        </div>
+        </header>
     );
 }
