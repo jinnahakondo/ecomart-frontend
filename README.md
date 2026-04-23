@@ -6,8 +6,8 @@
 
 ## 🚀 Live Demo
 
-- 🌐 **Frontend:** https://your-frontend-url.com  
-- 🔧 **Backend API:** http://ecomart-backend-mu.vercel.app  
+- 🌐 **Frontend:** https://ecomart-frontend-three.vercel.app/
+- 🔧 **Backend API:** https://ecomart-backend-mu.vercel.app/
 
 ---
 
@@ -27,3 +27,80 @@ This project simulates enterprise-level e-commerce architecture.
 ---
 
 ## 🏗️ System Architecture
+
+
+---
+
+## ⚙️ Tech Stack
+
+### Frontend
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- React Query
+- Framer Motion
+
+### Backend
+- Node.js
+- Express.js
+- TypeScript
+- MongoDB + Mongoose
+- JWT Authentication
+- bcrypt.js
+
+### AI Services
+- Google Gemini API
+
+### Deployment
+- Frontend: Vercel  
+- Backend: Vercel / Render  
+
+---
+
+## ✨ Key Features
+
+### 🛍️ E-Commerce Core
+- Product listing system
+- Advanced filtering & search
+- Sorting (price, rating, newest)
+- Pagination / scalable data fetching
+- Product detail pages
+- Related product recommendations
+
+### 👤 Authentication & Security
+- JWT-based authentication
+- HTTP-only cookies
+- Password hashing (bcrypt)
+- Role-based authorization (USER / ADMIN)
+- Secure logout system
+
+### 🧑‍💻 User System
+- User profile management
+- Order history tracking
+- Review submission system
+
+### 🛠️ Admin Dashboard
+- Manage users, products, and orders
+- Analytics dashboard
+- Real-time system statistics
+- Chart-based insights
+
+### 🤖 AI Integration
+- AI Chat Assistant (Gemini)
+- AI Product Description Generator
+- AI Review Summarization
+- Smart recommendation system
+
+---
+
+## 📊 Dashboard Analytics
+
+- Total Users
+- Total Products
+- Total Orders
+- Revenue Tracking
+- Chart visualization (Bar / Line / Pie)
+
+---
+
+
