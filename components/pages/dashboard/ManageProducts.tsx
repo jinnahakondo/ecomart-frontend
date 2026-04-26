@@ -10,6 +10,7 @@ import {
     FaFilter,
 } from "react-icons/fa";
 import DashboardPageHeader from "./DashboardPageHeader";
+import ProductAddModal from "@/components/modal/ProductAddModal";
 
 type Product = {
     _id: string;
@@ -77,6 +78,7 @@ export default function ManageProducts() {
             {p}
         </button>
     ));
+    const modalRef = React.useRef<HTMLDialogElement>(null);
 
     return (
         <div className="p-4 space-y-6">
@@ -84,6 +86,7 @@ export default function ManageProducts() {
             <DashboardPageHeader
                 title="Manage Products"
                 subTitle="Manage your store products, pricing, and stock."
+                headerBtnFn={() => modalRef?.current?.showModal()}
                 headerBtnContent={
                     <>
                         <FaPlus />
@@ -226,6 +229,9 @@ export default function ManageProducts() {
                     </button>
                 </div>
             </div>
+
+            {/* modals  */}
+            <ProductAddModal modalRef={modalRef} />
         </div>
     );
 }

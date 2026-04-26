@@ -1,8 +1,6 @@
 "use client";
-
-import Link from "next/link";
 import Image from "next/image";
-import { FaUser, FaArrowRightFromBracket, FaGear, FaLayout } from "react-icons/fa6";
+import {  FaArrowRightFromBracket, FaGear, } from "react-icons/fa6";
 import NavLink from "./NavLink/NavLink";
 import { useAuth } from "@/lib/providers/AuthProvider";
 import AuthModal from "./modal/AuthModal";
