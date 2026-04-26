@@ -15,6 +15,7 @@ import {
 import { Sparkles } from "lucide-react";
 import { FaCheckCircle } from "react-icons/fa";
 import { categoryData } from "@/lib/data/categoryData";
+import { toast } from "sonner";
 
 interface ProductInputs {
     title: string;
@@ -43,17 +44,7 @@ export default function ProductAddModal({ modalRef }: Props) {
         setValue,
         reset,
         formState: { errors },
-    } = useForm<ProductInputs>({
-        defaultValues: {
-            category: "",
-            availabilityStatus: "in-stock",
-            price: 0,
-            oldPrice: 0,
-            stock: 0,
-            weight: 0,
-            discountPercentage: 0,
-        },
-    });
+    } = useForm<ProductInputs>();
 
     const productTitle = watch("title");
 
@@ -112,6 +103,8 @@ export default function ProductAddModal({ modalRef }: Props) {
                     .filter(Boolean),
             };
 
+            console.log("data", formattedData);
+
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/products`, {
                 method: "POST",
                 headers: {
@@ -132,7 +125,6 @@ export default function ProductAddModal({ modalRef }: Props) {
         onSuccess: () => {
             reset();
             modalRef.current?.close();
-
             Swal.fire({
                 title: "Product Added!",
                 text: "Your new product has been successfully created.",
@@ -143,10 +135,11 @@ export default function ProductAddModal({ modalRef }: Props) {
 
         onError: async (error: any) => {
             Swal.fire({
-                title: "Submission Failed",
-                text: error.message || "Something went wrong.",
+                title: "Failed",
+                text: error.message || "Failed to add product. Please try again.",
                 icon: "error",
                 confirmButtonColor: "#ef4444",
+                target: modalRef.current || "body",
             });
         },
     });
