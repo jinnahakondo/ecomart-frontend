@@ -6,7 +6,9 @@ import { Product } from "@/lib/types/product";
 // Fetch products with limit from API
 export const getProducts = async (limit: number) => {
     try {
-        const res = await fetch(`${process.env.API}/products?limit=${limit}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/products?limit=${limit}`, {
+            next: { revalidate: 3600 }
+        })
         const data = await res.json();
         return data.data;
     } catch (error) {

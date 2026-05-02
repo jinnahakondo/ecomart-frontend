@@ -26,7 +26,7 @@ export default function DashboardLayout({
         return <LoadingScreen />
     }
 
-    //dashbaord nav links
+    // dashboard nav links
     const links = <>
         {/* user links */}
         {user?.role === "user" &&
@@ -38,14 +38,12 @@ export default function DashboardLayout({
                     </NavLink>
                 </li>
                 <li><NavLink href="/dashboard/user/my-orders"><HiOutlineShoppingCart size={22} />My Orders</NavLink></li>
-
                 <li><NavLink href="/dashboard/user/my-profile"><FaRegUser size={22} />My Profile</NavLink></li>
-
                 <li><NavLink href="/dashboard/user/my-reviews"><FaRegStar size={22} />My Reviews</NavLink></li>
             </>
         }
         {/* admin links */}
-        ${user?.role === 'admin' &&
+        {user?.role === 'admin' &&
             <>
                 <li className="w-full">
                     <NavLink href={'/dashboard/admin'} >
@@ -54,22 +52,20 @@ export default function DashboardLayout({
                     </NavLink>
                 </li>
                 <li><NavLink href="/dashboard/admin/manage-orders"><HiOutlineShoppingCart size={22} />Manage Orders</NavLink></li>
-
                 <li><NavLink href="/dashboard/admin/manage-products"><MdOutlineInventory2 size={22} />Manage Products</NavLink></li>
-
                 <li><NavLink href="/dashboard/admin/manage-users"><LuUsers size={22} />Manage Users</NavLink></li>
-
                 <li><NavLink href="/dashboard/admin/my-profile"><FaRegUser size={22} />My Profile</NavLink></li>
             </>
         }
 
         <li>
-            <a>
+            <a className="text-base-content/70 hover:text-base-content">
                 <HiOutlineCog size={18} />
                 Settings
             </a>
         </li>
     </>
+
     return (
         <div className="max-w-7xl mx-auto w-full">
             <div className="drawer lg:drawer-open">
@@ -78,12 +74,10 @@ export default function DashboardLayout({
                 <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
 
                 {/* content area */}
-                <div className="drawer-content flex flex-col">
+                <div className="drawer-content flex flex-col min-h-screen bg-base-100">
 
                     {/* navbar */}
-                    <nav className="navbar bg-base-200 px-4">
-
-                        {/* mobile menu button */}
+                    <nav className="navbar border-b border-base-200 bg-base-200 px-4 lg:px-6 shadow-sm">
                         <label
                             htmlFor="dashboard-drawer"
                             className="btn btn-ghost btn-square lg:hidden"
@@ -91,39 +85,37 @@ export default function DashboardLayout({
                             <HiOutlineMenuAlt2 size={22} />
                         </label>
 
-                        <h1 className="font-semibold text-lg">Dashboard</h1>
+                        <div className="flex-1">
+                            <h1 className="font-semibold text-xl">Dashboard</h1>
+                            <p className="text-sm text-base-content/60">Manage your store, orders, and user activity.</p>
+                        </div>
                     </nav>
 
                     {/* page content */}
-                    <main className="p-4">{content}</main>
+                    <main className="p-4 lg:p-6">{content}</main>
                 </div>
 
                 {/* sidebar */}
                 <div className="drawer-side">
-                    <label
-                        htmlFor="dashboard-drawer"
-                        className="drawer-overlay"
-                    ></label>
+                    <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
 
-                    <aside className="w-64 min-h-full bg-base-200 flex flex-col">
-
-                        {/* logo / title */}
-                        <div className="p-5 ">
-                           <Logo/>
+                    <aside className="w-72 min-h-screen bg-base-200 border-r border-base-300 shadow-xl flex flex-col">
+                        <div className="p-6 border-b border-base-300">
+                            <Logo />
+                            <div className="mt-4 p-4 rounded-3xl bg-base-100 shadow-inner">
+                                <p className="text-xs uppercase tracking-[0.2em] text-base-content/40">Logged in as</p>
+                                <p className="mt-2 font-semibold text-base-content">{user?.name || 'Dashboard User'}</p>
+                                <p className="text-sm text-base-content/60">{user?.role?.toUpperCase() || 'Guest'}</p>
+                            </div>
                         </div>
 
-                        {/* menu */}
-                        <ul className="menu px-3 flex-1 gap-1 dashboard w-full">
+                        <ul className="menu menu-compact px-4 py-4 gap-1 flex-1">
                             {links}
                         </ul>
 
-                        {/* bottom section */}
-                        <div className="p-4">
-                            <button className="btn btn-primary btn-sm w-full">
-                                Support Ticket
-                            </button>
+                        <div className="p-5 border-t border-base-300">
+                            <button className="btn btn-primary btn-block normal-case">Support Ticket</button>
                         </div>
-
                     </aside>
                 </div>
             </div>

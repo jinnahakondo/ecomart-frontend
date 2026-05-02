@@ -1,9 +1,25 @@
-const LoadingComponent = () => {
+interface LoadingComponentProps {
+    size?: 'xs' | 'sm' | 'md' | 'lg';
+    fullScreen?: boolean;
+    className?: string;
+}
+
+const LoadingComponent = ({
+    size = 'lg',
+    fullScreen = true,
+    className = ''
+}: LoadingComponentProps) => {
+    const containerClasses = fullScreen
+        ? "flex items-center justify-center w-full py-12 h-screen"
+        : "flex items-center justify-center w-full py-8";
+
+    const spinnerClasses = `loading loading-spinner loading-${size} text-primary ${className}`;
+
     return (
-        <div className="flex items-center justify-center w-full py-12 h-screen ">
-            {/* 'loading-spinner' is the most standard 'big company' look */}
-            <span className="loading loading-spinner loading-lg text-primary"></span>
+        <div className={containerClasses}>
+            <span className={spinnerClasses}></span>
         </div>
     );
 };
+
 export default LoadingComponent;

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaGoogle, FaEnvelope, FaLock, FaUser } from "react-icons/fa6";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 interface Inputs {
     name: string;
@@ -38,24 +38,12 @@ export default function RegisterForm({ modalRef, setIsLogin }: Props) {
 
             if (!res.ok) throw new Error("Registration failed");
 
-            Swal.fire({
-                icon: "success",
-                title: "Account Created!",
-                text: "Please login to continue.",
-                timer: 2000,
-                showConfirmButton: false,
-            });
-
-            setIsLogin(true); // Switch to login view
+            toast.success("Account created! Please login to continue.");
+            setIsLogin(true);
         } catch (error: any) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: error.message || "Something went wrong",
-            });
+            toast.error(error.message || "Registration failed");
         } finally {
             setLoading(false);
-            // Optionally close modal only on success, or keep open to let them login
         }
     };
 

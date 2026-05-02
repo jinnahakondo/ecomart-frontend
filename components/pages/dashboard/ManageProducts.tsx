@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/lib/providers/AuthProvider";
+import LoadingComponent from "@/components/LoadingComponent";
 import { useQuery } from "@tanstack/react-query";
 import {
     FaPlus,
@@ -81,11 +82,10 @@ export default function ManageProducts() {
     const modalRef = React.useRef<HTMLDialogElement>(null);
 
     return (
-        <div className="p-4 space-y-6">
-            {/* Header */}
+        <div className="space-y-6">
             <DashboardPageHeader
                 title="Manage Products"
-                subTitle="Manage your store products, pricing, and stock."
+                subTitle="Manage store inventory, pricing, and availability from a clean product grid."
                 headerBtnFn={() => modalRef?.current?.showModal()}
                 headerBtnContent={
                     <>
@@ -95,142 +95,115 @@ export default function ManageProducts() {
                 }
             />
 
-            {/* Filters */}
-            <div className="flex flex-col md:flex-row gap-3 md:items-center justify-between">
-                <button className="btn btn-outline btn-sm gap-2">
-                    <FaFilter />
-                    Filter
-                </button>
-
-                {/* Search */}
-                <div className="relative">
-                    <FaSearch className="absolute top-3 left-3 text-gray-400" />
-                    <input
-                        value={search}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        type="text"
-                        placeholder="Search products..."
-                        className="input input-bordered pl-10 w-full md:w-80"
-                    />
+            <div className="rounded-3xl bg-base-100 border border-base-200 p-6 shadow-sm space-y-4">
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <button className="btn btn-outline btn-sm gap-2">
+                        <FaFilter />
+                        Filter
+                    </button>
+                    <div className="relative w-full md:w-80">
+                        <FaSearch className="absolute top-3 left-3 text-base-content/40" />
+                        <input
+                            value={search}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            type="text"
+                            placeholder="Search products..."
+                            className="input input-bordered pl-10 w-full"
+                        />
+                    </div>
                 </div>
-            </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto bg-base-100 shadow rounded-xl">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Status</th>
-                            <th className="text-right">Action</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {isLoading ? (
-                            <tr className="text-center">
-                                <td colSpan={6}>Loading products...</td>
+                <div className="overflow-x-auto rounded-3xl border border-base-200 bg-base-100 shadow-sm">
+                    <table className="table w-full text-base-content/80">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th className="text-right">Action</th>
                             </tr>
-                        ) : products.length === 0 ? (
-                            <tr className="text-center">
-                                <td colSpan={6}>No Products Found</td>
-                            </tr>
-                        ) : (
-                            products.map((p: Product) => (
-                                <tr key={p._id} className="hover">
-                                    {/* Product Info */}
-                                    <td className="flex items-center gap-3">
-                                        <img
-                                            src={p.thumbnail}
-                                            alt={p.title}
-                                            className="w-12 h-12 rounded object-cover"
-                                        />
-                                        <div>
-                                            <p className="font-medium">{p.title}</p>
-                                            <p className="text-xs text-gray-500">
-                                                {p.rating} ★
-                                            </p>
-                                        </div>
-                                    </td>
-
-                                    <td>{p.category}</td>
-
-                                    {/* Price */}
-                                    <td>
-                                        <span className="font-semibold">
-                                            ${p.price.toFixed(2)}
-                                        </span>
-                                        <br />
-                                        <span className="text-xs line-through text-gray-400">
-                                            ${p.oldPrice.toFixed(2)}
-                                        </span>
-                                    </td>
-
-                                    {/* Stock */}
-                                    <td>{p.stock}</td>
-
-                                    {/* Status */}
-                                    <td>
-                                        <span className="badge badge-soft badge-sm badge-success">
-                                            {p.availabilityStatus}
-                                        </span>
-                                    </td>
-
-                                    {/* Action */}
-                                    <td className="text-right">
-                                        <div className="dropdown dropdown-left">
-                                            <button className="btn btn-ghost btn-sm">
-                                                <FaEllipsisV />
-                                            </button>
-
-                                            <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32">
-                                                <li>
-                                                    <button>Edit</button>
-                                                </li>
-                                                <li>
-                                                    <button className="text-red-500">
-                                                        Delete
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
+                        </thead>
+                        <tbody>
+                            {isLoading ? (
+                                <tr className="text-center">
+                                    <td colSpan={6} className="py-10">
+                                        <LoadingComponent size="md" fullScreen={false} />
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                            ) : products.length === 0 ? (
+                                <tr className="text-center">
+                                    <td colSpan={6} className="py-10">No Products Found</td>
+                                </tr>
+                            ) : (
+                                products.map((p: Product) => (
+                                    <tr key={p._id} className="hover:bg-base-200 transition-colors">
+                                        <td className="flex items-center gap-3">
+                                            <img
+                                                src={p.thumbnail}
+                                                alt={p.title}
+                                                className="w-12 h-12 rounded object-cover"
+                                            />
+                                            <div>
+                                                <p className="font-medium">{p.title}</p>
+                                                <p className="text-xs text-base-content/50">{p.rating} ★ rating</p>
+                                            </div>
+                                        </td>
+                                        <td>{p.category}</td>
+                                        <td>
+                                            <span className="font-semibold">${p.price.toFixed(2)}</span>
+                                            <br />
+                                            <span className="text-xs line-through text-base-content/40">
+                                                ${p.oldPrice.toFixed(2)}
+                                            </span>
+                                        </td>
+                                        <td>{p.stock}</td>
+                                        <td>
+                                            <span className="badge badge-success badge-sm">
+                                                {p.availabilityStatus}
+                                            </span>
+                                        </td>
+                                        <td className="text-right">
+                                            <div className="dropdown dropdown-left">
+                                                <button className="btn btn-ghost btn-sm">
+                                                    <FaEllipsisV />
+                                                </button>
+                                                <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32">
+                                                    <li><button>Edit</button></li>
+                                                    <li><button className="text-red-500">Delete</button></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
-            {/* Pagination */}
-            <div className="flex justify-between items-center text-sm">
-                <p className="text-gray-500">
-                    Showing {products.length} of {total} products
-                </p>
-
-                <div className="join">
-                    <button
-                        className="join-item btn btn-sm"
-                        disabled={page === 1}
-                        onClick={() => handlePageChange(page - 1)}
-                    >
-                        Previous
-                    </button>
-                    {pageButtons}
-                    <button
-                        className="join-item btn btn-sm"
-                        disabled={page === totalPages}
-                        onClick={() => handlePageChange(page + 1)}
-                    >
-                        Next
-                    </button>
+                <div className="flex flex-col gap-3 justify-between text-sm md:flex-row md:items-center">
+                    <p className="text-base-content/60">Showing {products.length} of {total} products</p>
+                    <div className="join">
+                        <button
+                            className="join-item btn btn-sm"
+                            disabled={page === 1}
+                            onClick={() => handlePageChange(page - 1)}
+                        >
+                            Previous
+                        </button>
+                        {pageButtons}
+                        <button
+                            className="join-item btn btn-sm"
+                            disabled={page === totalPages}
+                            onClick={() => handlePageChange(page + 1)}
+                        >
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* modals  */}
             <ProductAddModal modalRef={modalRef} />
         </div>
     );

@@ -3,6 +3,8 @@ import Pagination from "@/components/pages/products/Pagination"
 import ProductFilterSidebar from "@/components/pages/products/ProductFilter"
 import { Product } from "@/lib/types/product"
 
+const API_BASE = process.env.NEXT_PUBLIC_API || process.env.API
+
 const getProducts = async (search: string, category: string, sort: string, skip: number, limit: number) => {
     const params = new URLSearchParams({
         search,
@@ -11,7 +13,7 @@ const getProducts = async (search: string, category: string, sort: string, skip:
         skip: skip.toString(),
         limit: limit.toString()
     });
-    const res = await fetch(`${process.env.API}/products?${params.toString()}`, {
+    const res = await fetch(`${API_BASE}/products?${params.toString()}`, {
         next: { revalidate: 60 }
     })
     const data = await res.json();

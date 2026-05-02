@@ -93,7 +93,7 @@ export default function ReviewForm({ productId }: Props) {
         className="btn btn-primary w-full"
         disabled={loading}
       >
-        {loading ? "Submitting..." : "Submit Review"}
+        {loading ? <span className="loading loading-spinner loading-xs"></span> : "Submit Review"}
       </button>
     </form>
   );

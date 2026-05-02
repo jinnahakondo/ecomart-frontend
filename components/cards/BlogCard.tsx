@@ -2,6 +2,7 @@
 
 import React from "react";
 import NextLink from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaCalendar, FaUser, FaArrowRight } from "react-icons/fa";
 import { BlogPost } from "@/lib/types/blog";
@@ -22,9 +23,13 @@ export default function BlogCard({ post }: Props) {
         >
             {/* Image */}
             <figure className="h-48 overflow-hidden">
-                <img
+                <Image
                     src={post.image}
                     alt={post.title}
+                    width={400}
+                    height={192}
+                    quality={80}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="w-full h-full object-cover"
                 />
             </figure>

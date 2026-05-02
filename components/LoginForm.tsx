@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaGoogle, FaUserShield, FaUser, FaEnvelope, FaLock } from "react-icons/fa6";
 import { useAuth } from "@/lib/providers/AuthProvider";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 interface Props {
     modalRef: React.RefObject<HTMLDialogElement | null>;
@@ -47,9 +47,11 @@ export default function LoginForm({ modalRef, setIsLogin }: Props) {
             if (!res.ok) throw new Error("Invalid credentials");
             const result = await res.json();
             setUser(result?.data);
+            toast.success("Logged in successfully");
             modalRef.current?.close();
         } catch (error: any) {
             setServerError(error.message || "Something went wrong");
+            toast.error(error.message || "Login failed");
         } finally {
             setLoading(false);
         }

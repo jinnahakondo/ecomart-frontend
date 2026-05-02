@@ -1,6 +1,7 @@
 import { Product } from "@/lib/types/product";
 import Image from "next/image";
 import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
 
 type Props = {
     product: Product;
@@ -12,18 +13,20 @@ export default function ProductCard({ product }: Props) {
         <div className="bg-base-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition flex flex-col h-full group">
 
             {/* Product Image */}
-            <div className="relative rounded-xl overflow-hidden bg-base-200 group-hover:scale-110 transition-all duration-200 ">
+            <div className="relative rounded-xl overflow-hidden bg-base-200 group-hover:scale-110 transition-all duration-200">
 
                 <Image
                     src={product?.thumbnail}
                     alt={product.title}
-                    width={100}
-                    height={100}
+                    width={400}
+                    height={400}
+                    quality={80}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    priority={false}
                     className="w-full h-40 object-cover"
                 />
 
-                {/* Badge discount parcentage*/}
-
+                {/* Badge discount percentage*/}
                 <span className="absolute top-3 left-3 badge badge-primary text-primary-content">
                     {Math.round(product.discountPercentage)}% OFF
                 </span>
@@ -34,7 +37,7 @@ export default function ProductCard({ product }: Props) {
             <div className="mt-4 space-y-1 mb-4">
 
                 {/* title  */}
-                <h3 className="font-semibold text-base-content text-xs">
+                <h3 className="font-semibold text-base-content text-xs line-clamp-2">
                     {product.title}
                 </h3>
 
@@ -53,11 +56,21 @@ export default function ProductCard({ product }: Props) {
                     )}
                 </div>
 
-                {/* Add To Cart */}
+                {/* Stock Status */}
+                <p className="text-xs text-success font-medium">
+                    {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                </p>
             </div>
-            <Link href={`/products/${product?._id}`} className="btn btn-sm btn-primary rounded-full w-full  gap-2 mt-auto">
-                View Details
-            </Link>
+
+            {/* Buttons */}
+            <div className="flex gap-2 mt-auto">
+                <button className="btn btn-sm btn-primary flex-1 rounded-full gap-1" disabled={product.stock === 0}>
+                    <ShoppingCart size={14} /> Add
+                </button>
+                <Link href={`/products/${product?._id}`} className="btn btn-sm btn-outline flex-1 rounded-full">
+                    Details
+                </Link>
+            </div>
         </div>
     );
 }

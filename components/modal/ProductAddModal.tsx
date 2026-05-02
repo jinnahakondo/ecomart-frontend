@@ -3,7 +3,7 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import {
     FaPlus,
     FaCircleExclamation,
@@ -15,7 +15,6 @@ import {
 import { Sparkles } from "lucide-react";
 import { FaCheckCircle } from "react-icons/fa";
 import { categoryData } from "@/lib/data/categoryData";
-import { toast } from "sonner";
 
 interface ProductInputs {
     title: string;
@@ -80,15 +79,11 @@ export default function ProductAddModal({ modalRef }: Props) {
             setValue("description", description, {
                 shouldValidate: true,
             });
+            toast.success("Description generated");
         },
 
-        onError: async (error: any) => {
-            await Swal.fire({
-                title: "AI Failed",
-                text: error.message || "Description generate failed.",
-                icon: "error",
-                confirmButtonColor: "#ef4444",
-            });
+        onError: (error: any) => {
+            toast.error(error.message || "Failed to generate description");
         },
     });
 
@@ -125,22 +120,11 @@ export default function ProductAddModal({ modalRef }: Props) {
         onSuccess: () => {
             reset();
             modalRef.current?.close();
-            Swal.fire({
-                title: "Product Added!",
-                text: "Your new product has been successfully created.",
-                icon: "success",
-                confirmButtonColor: "#570df8",
-            });
+            toast.success("Product added successfully!");
         },
 
-        onError: async (error: any) => {
-            Swal.fire({
-                title: "Failed",
-                text: error.message || "Failed to add product. Please try again.",
-                icon: "error",
-                confirmButtonColor: "#ef4444",
-                target: modalRef.current || "body",
-            });
+        onError: (error: any) => {
+            toast.error(error.message || "Failed to add product. Please try again.");
         },
     });
 

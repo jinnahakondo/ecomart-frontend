@@ -14,12 +14,14 @@ export default function DashboardPageHeader({
     headerBtnFn
 }: Props) {
     return (
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-                <h1 className="text-2xl font-semibold">{title}</h1>
-                <p className="text-sm text-gray-500">
-                    {subTitle}
-                </p>
+                <h1 className="text-3xl font-semibold tracking-tight text-base-content">{title}</h1>
+                {subTitle ? (
+                    <p className="text-sm text-base-content/60 mt-2 max-w-2xl">
+                        {subTitle}
+                    </p>
+                ) : null}
             </div>
 
             {headerBtnContent && (

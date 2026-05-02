@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingComponent from "../LoadingComponent";
 import { IOrder } from "../pages/dashboard/MyOrders";
 
 interface Props {
@@ -27,18 +28,18 @@ export default function OrderDetailsModal({
                 </form>
 
                 {!order ? (
-                    <p>Loading...</p>
+                    <LoadingComponent size="sm" fullScreen={false} />
                 ) : (
                     <>
                         {/* Product info */}
                         <div className="flex gap-4 items-center mb-4">
                             <img
-                                src={order.productId.thumbnail}
-                                alt={order.productId.title}
+                                src={order.productId?.thumbnail ?? '/fallback-product.png'}
+                                alt={order.productId?.title ?? 'Order product'}
                                 className="w-20 h-20 rounded border"
                             />
                             <div>
-                                <h3 className="text-lg font-bold">{order.productId.title}</h3>
+                                <h3 className="text-lg font-bold">{order.productId?.title ?? 'Product unavailable'}</h3>
                                 <p className="text-sm text-gray-500">
                                     Price: {(order.price).toFixed(0) || 0} × {order.quantity} = {(order.totalPrice).toFixed(0) || 0}
                                 </p>

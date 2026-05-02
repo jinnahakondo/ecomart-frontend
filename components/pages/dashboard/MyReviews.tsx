@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/providers/AuthProvider";
+import LoadingComponent from "@/components/LoadingComponent";
 import {
     useMutation,
     useQuery,
@@ -42,7 +43,7 @@ export default function MyReviews() {
             }
 
             const data = await res.json();
-            return data.data;
+            return data?.data || [];
         },
         enabled: !!user?.email,
     });
@@ -113,7 +114,7 @@ export default function MyReviews() {
 
                 {/* Loading */}
                 {isLoading && (
-                    <p className="text-center text-sm text-gray-500">Loading...</p>
+                    <LoadingComponent size="sm" fullScreen={false} />
                 )}
 
                 {/* Error */}

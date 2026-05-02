@@ -1,8 +1,42 @@
 import { blogPosts } from "@/lib/data/blogData";
 import Link from "next/link";
+import Image from "next/image";
+import { Metadata } from "next";
 import { FaArrowLeft, FaCalendar, FaUser, FaTag } from "react-icons/fa";
 
-export default async function BlogPost({ params }: { params: Promise<{ id: string }> }) {
+type Props = {
+    params: Promise<{ id: string }>
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { id } = await params;
+    const post = blogPosts.find(p => p.id === Number(id));
+
+    if (!post) {
+        return { title: "Post not found" };
+    }
+
+    return {
+        title: `${post.title} | Ecomart Blog`,
+        description: post.excerpt,
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            images: [{ url: post.image, width: 1200, height: 630 }],
+            type: 'article',
+            publishedTime: post.date,
+            authors: [post.author],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.excerpt,
+            images: [post.image],
+        },
+    };
+}
+
+export default async function BlogPost({ params }: Props) {
     const { id } = await params;
     const post = blogPosts.find(p => p.id === Number(id));
 
@@ -61,10 +95,15 @@ export default async function BlogPost({ params }: { params: Promise<{ id: strin
 
             {/* Featured Image */}
             <div className="relative aspect-video w-full overflow-hidden rounded-3xl shadow-xl mb-12">
-                <img
+                <Image
                     src={post.image}
                     alt={post.title}
-                    className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
+                    width={1200}
+                    height={600}
+                    priority={true}
+                    quality={85}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                    className="object-cover w-full h-full"
                 />
             </div>
 

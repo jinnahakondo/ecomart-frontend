@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
-import {  FaArrowRightFromBracket, FaGear, } from "react-icons/fa6";
+import { FaArrowRightFromBracket, FaGear, } from "react-icons/fa6";
 import NavLink from "./NavLink/NavLink";
 import { useAuth } from "@/lib/providers/AuthProvider";
 import AuthModal from "./modal/AuthModal";
 import { useRef } from "react";
 import Logo from "./Logo";
+import { toast } from "sonner";
 
 export default function Navbar() {
     const { user, loading, setUser } = useAuth();
@@ -18,9 +19,15 @@ export default function Navbar() {
                 credentials: "include",
             });
             const result = await res.json();
-            if (result.success) setUser(null);
+            if (result.success) {
+                setUser(null);
+                toast.success("Logged out successfully");
+            } else {
+                toast.error("Logout failed");
+            }
         } catch (error) {
             console.error("Logout failed", error);
+            toast.error("Logout failed. Please try again.");
         }
     };
 
@@ -43,7 +50,7 @@ export default function Navbar() {
     );
 
     const renderAuthSection = () => {
-        if (loading) return <span className="loading loading-spinner loading-sm opacity-50" />;
+        if (loading) return <div className="skeleton w-9 h-9 rounded-full" />;
 
         if (user) {
             return (
@@ -55,6 +62,8 @@ export default function Navbar() {
                                 alt="Profile"
                                 width={40}
                                 height={40}
+                                quality={75}
+                                sizes="40px"
                             />
                         </div>
                     </div>

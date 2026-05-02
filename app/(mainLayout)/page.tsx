@@ -1,19 +1,17 @@
 
 import dynamic from 'next/dynamic'
+import { Suspense } from 'react'
 
-const FeaturesSection = dynamic(() => import("@/components/pages/home/FeaturesSection"), {
-    loading: () => <p className="text-center py-12">Loading features...</p>
-})
-const PopularProducts = dynamic(() => import("@/components/pages/home/PopularProducts"), {
-    loading: () => <p className="text-center py-12">Loading popular products...</p>
-})
+const FeaturesSection = dynamic(() => import("@/components/pages/home/FeaturesSection"))
+const PopularProducts = dynamic(() => import("@/components/pages/home/PopularProducts"))
+const LatestProducts = dynamic(() => import("@/components/pages/home/LatestProducts"))
+const BlogSection = dynamic(() => import("@/components/pages/home/BlogSection"))
 
-const LatestProducts = dynamic(() => import("@/components/pages/home/LatestProducts"), {
-    loading: () => <p className="text-center py-12">Loading latest products...</p>
-})
-const BlogSection = dynamic(() => import("@/components/pages/home/BlogSection"), {
-    loading: () => <p className="text-center py-12">Loading blog posts...</p>
-})
+const LoadingFallback = ({ label }: { label: string }) => (
+    <div className="py-12 flex items-center justify-center">
+        <span className="loading loading-spinner loading-md text-primary" />
+    </div>
+)
 
 import CtaSection from '@/components/CtaSection'
 import Categories from '@/components/pages/home/CategorieSection'
@@ -34,23 +32,35 @@ export default function Home() {
             {/* Categories for easy navigation */}
             <Categories />
 
+
             {/* Features highlighting unique selling points */}
-            <FeaturesSection />
+            <Suspense fallback={<LoadingFallback label="features" />}>
+                <FeaturesSection />
+            </Suspense>
 
             {/* Featured products from inventory */}
             <FeaturedProducts />
 
+
             {/* Popular products showcase */}
-            <PopularProducts />
+            <Suspense fallback={<LoadingFallback label="popular products" />}>
+                <PopularProducts />
+            </Suspense>
+
 
             {/* Latest products arriving */}
-            <LatestProducts />
+            <Suspense fallback={<LoadingFallback label="latest products" />}>
+                <LatestProducts />
+            </Suspense>
 
             {/* Special promotional offers */}
             {/* <SpecialOffers /> */}
 
+
             {/* Latest blog content */}
-            <BlogSection />
+            <Suspense fallback={<LoadingFallback label="blog posts" />}>
+                <BlogSection />
+            </Suspense>
 
             {/* Statistics building trust */}
             <Statistics />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/providers/AuthProvider";
+import LoadingComponent from "@/components/LoadingComponent";
 import { Product } from "@/lib/types/product";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -18,7 +19,7 @@ import {
 } from "react-icons/fa";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import { AddressForm, OrderPayload } from "@/lib/types/bookOrder";
 
 
@@ -45,7 +46,7 @@ export default function BookOrder() {
       if (!res.ok) throw new Error("Failed to fetch product");
 
       const data = await res.json();
-      return data.data as Product;
+      return data?.data as Product;
     },
     enabled: !!productId,
   });
@@ -74,13 +75,8 @@ export default function BookOrder() {
         }
       );
 
-      // console.log("response order:", res);
-
       if (!res.ok) {
-        Swal.fire({
-          icon: "error",
-          text: "Something went wrong!"
-        })
+        toast.error("Something went wrong");
         throw new Error("Something went wrong");
       }
 
@@ -92,10 +88,7 @@ export default function BookOrder() {
       setQuantity(1);
       reset();
 
-      Swal.fire({
-        icon: "success",
-        text: "Order placed successfully"
-      })
+      toast.success("Order placed successfully");
 
       queryClient.invalidateQueries({ queryKey: ["my-orders"] });
 
@@ -104,15 +97,14 @@ export default function BookOrder() {
 
     onError: (error) => {
       console.error(error);
+      toast.error("Failed to place order");
     },
   });
 
   // Submit
   const onSubmit = (formData: AddressForm) => {
     if (!user) {
-      Swal.fire({
-        text: "please login to place order",
-      })
+      toast.error("Please login to place an order");
       return;
     }
 
@@ -125,18 +117,12 @@ export default function BookOrder() {
       address: formData,
     };
 
-    // console.log("order data:", orderData);
-
     mutate(orderData);
   };
 
   // Loading
   if (isProductLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary" />
-      </div>
-    );
+    return <LoadingComponent />;
   }
 
   // Redirect if no productId

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaEllipsisV } from "react-icons/fa";
 import DashboardPageHeader from "./DashboardPageHeader";
-import Swal from "sweetalert2";
+import LoadingComponent from "@/components/LoadingComponent";
 import Image from "next/image";
 import { toast } from "sonner";
 
@@ -33,6 +33,8 @@ export default function ManageOrders() {
     const [filter, setFilter] = useState("all");
     const queryClient = useQueryClient();
 
+    const [status, setStatus] = useState("");
+
     // FETCH ORDERS
     const {
         data = [],
@@ -44,7 +46,7 @@ export default function ManageOrders() {
         queryFn: async () => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API}/orders`);
             const result = await res.json();
-            return result.data;
+            return result?.data || [];
         },
         refetchInterval: 5000,
     });
@@ -99,15 +101,11 @@ export default function ManageOrders() {
 
         onSuccess: () => {
             refetchOrders();
-
-            toast.success("Status updated");
+            toast.success(`Order ${status} updated`);
         },
 
         onError: () => {
-            Swal.fire({
-                icon: "error",
-                title: "Update failed",
-            });
+            toast.error("Failed to update order");
         },
     });
 
@@ -128,61 +126,56 @@ export default function ManageOrders() {
                 queryKey: ["manage-orders"],
             });
 
-            Swal.fire({
-                icon: "success",
-                title: "Order deleted",
-            });
+            toast.success("Order deleted successfully");
         },
 
         onError: () => {
-            Swal.fire({
-                icon: "error",
-                title: "Something went wrong",
-            });
+            toast.error("Failed to delete order");
         },
     });
 
     const handleDelete = async (id: string) => {
-        const result = await Swal.fire({
-            title: "Want to delete this order?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-        });
-
-        if (result.isConfirmed) {
+        const confirmed = confirm("Are you sure you want to delete this order?");
+        if (confirmed) {
             deleteOrder(id);
         }
     };
 
     return (
-        <div className="p-4 space-y-5">
-            {/* Header */}
-            <DashboardPageHeader title="Manage Orders" />
+        <div className="space-y-6">
+            <DashboardPageHeader
+                title="Manage Orders"
+                subTitle="Track every order, update statuses, and keep the order pipeline moving smoothly."
+            />
 
-            {/* Filter */}
-            <div className="flex justify-between items-center">
-                <select
-                    className="select select-bordered select-sm"
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                >
-                    <option value="all">All Orders</option>
-                    <option value="pending">Pending</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="processing">Processing</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="out for delivery">Out for Delivery</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
+            <div className="grid gap-4 xl:grid-cols-[1.5fr_0.8fr]">
+                <div className="rounded-3xl bg-base-100 border border-base-200 p-6 shadow-sm">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="space-y-2">
+                            <p className="text-sm text-base-content/60">Order filter</p>
+                            <select
+                                className="select select-bordered select-sm w-full sm:w-auto"
+                                value={filter}
+                                onChange={(e) => setFilter(e.target.value)}
+                            >
+                                <option value="all">All Orders</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="out for delivery">Out for Delivery</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
 
-                <button className="btn btn-outline btn-sm">Last 30 Days</button>
+                        <button className="btn btn-outline btn-sm">Last 30 Days</button>
+                    </div>
+                </div>
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto bg-base-100 shadow rounded-xl">
-                <table className="table">
+            <div className="overflow-x-auto bg-base-100 shadow rounded-3xl border border-base-200">
+                <table className="table w-full text-base-content/80">
                     <thead>
                         <tr>
                             <th>Order ID</th>
@@ -196,16 +189,14 @@ export default function ManageOrders() {
                     </thead>
 
                     <tbody>
-                        {/* Loading */}
                         {isLoading && (
                             <tr>
                                 <td colSpan={7} className="text-center py-10">
-                                    <span className="loading loading-spinner loading-md"></span>
+                                    <LoadingComponent size="md" fullScreen={false} />
                                 </td>
                             </tr>
                         )}
 
-                        {/* Error */}
                         {isError && (
                             <tr>
                                 <td colSpan={7} className="text-center text-red-500">
@@ -214,69 +205,48 @@ export default function ManageOrders() {
                             </tr>
                         )}
 
-                        {/* Orders */}
                         {filteredOrders.map((order: Order) => (
-                            <tr key={order._id} className="hover">
-                                {/* Order ID */}
+                            <tr key={order._id} className="hover:bg-base-200 transition-colors">
                                 <td className="font-medium">#{order._id.slice(-6)}</td>
-
-                                {/* Customer */}
                                 <td>{order.address.fullName}</td>
-
-                                {/* Product */}
                                 <td>
                                     <div className="flex items-center gap-2">
                                         <Image
                                             width={50}
                                             height={50}
                                             src={order.productId?.thumbnail}
-                                            alt=""
+                                            alt={order.productId?.title || 'Product image'}
                                             className="w-10 h-10 rounded"
                                         />
                                         <span>{order.productId?.title}</span>
                                     </div>
                                 </td>
-
-                                {/* Date */}
-                                <td>
-                                    {new Date(order.createdAt).toLocaleDateString()}
-                                </td>
-
-                                {/* Total */}
+                                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                 <td>৳{order.totalPrice}</td>
-
-                                {/* Status */}
                                 <td>
                                     <select
                                         value={order.status}
                                         disabled={updating}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             updateStatus({
                                                 id: order._id,
                                                 status: e.target.value,
                                             })
-                                        }
+                                            setStatus(e.target.value)
+                                        }}
                                         className="select select-bordered select-sm"
                                     >
-                                        <option value={order.status}>
-                                            {order.status}
-                                        </option>
-
+                                        <option value={order.status}>{order.status}</option>
                                         {getNextStatus(order.status).map((status) => (
-                                            <option key={status} value={status}>
-                                                {status}
-                                            </option>
+                                            <option key={status} value={status}>{status}</option>
                                         ))}
                                     </select>
                                 </td>
-
-                                {/* Action */}
                                 <td className="text-right">
                                     <div className="dropdown dropdown-left">
                                         <button className="btn btn-ghost btn-sm">
                                             <FaEllipsisV />
                                         </button>
-
                                         <ul className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-32">
                                             <li>
                                                 <button
@@ -292,7 +262,6 @@ export default function ManageOrders() {
                             </tr>
                         ))}
 
-                        {/* Empty */}
                         {!isLoading && filteredOrders.length === 0 && (
                             <tr>
                                 <td colSpan={7} className="text-center py-8 text-gray-500">
@@ -304,7 +273,6 @@ export default function ManageOrders() {
                 </table>
             </div>
 
-            {/* Footer */}
             <div className="text-sm text-gray-500">
                 Showing {filteredOrders.length} orders
             </div>

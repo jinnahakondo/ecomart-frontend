@@ -7,7 +7,7 @@ import { FiCheck, FiX, FiUpload } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import Swal from "sweetalert2";
+import { toast } from "sonner";
 import { updateUser } from "@/lib/api/user";
 
 type FormData = {
@@ -20,7 +20,7 @@ type FormData = {
 };
 
 export default function Profile() {
-    const { user, setUser } = useAuth(); // make sure setUser is exposed from your AuthProvider
+    const { user, setUser } = useAuth();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -46,27 +46,21 @@ export default function Profile() {
         mutationFn: async (file: File) => {
             const formData = new FormData();
             formData.append("avatar", file);
-            // Replace with your actual avatar upload endpoint
             const res = await fetch(`/api/users/${user!._id}/avatar`, {
                 method: "PATCH",
                 body: formData,
             });
             if (!res.ok) throw new Error("Upload failed");
-            return res.json(); // expects { avatarUrl: string }
+            return res.json();
         },
         onSuccess: (data) => {
             setUser?.((prev) => prev ? { ...prev, avatar: data.avatarUrl } : prev);
             setPreview(null);
             setAvatarFile(null);
-            Swal.fire({
-                icon: "success",
-                title: "Photo updated",
-                timer: 1500,
-                showConfirmButton: false,
-            });
+            toast.success("Photo updated successfully");
         },
-        onError: () => {
-            Swal.fire({ icon: "error", title: "Photo upload failed" });
+        onError: (error) => {
+            toast.error("Photo upload failed. Please try again.");
         },
     });
 
@@ -74,15 +68,10 @@ export default function Profile() {
     const profileMutation = useMutation({
         mutationFn: (data: FormData) => updateUser(user!._id, data),
         onSuccess: () => {
-            Swal.fire({
-                icon: "success",
-                title: "Profile updated",
-                timer: 1500,
-                showConfirmButton: false,
-            });
+            toast.success("Profile updated successfully");
         },
-        onError: () => {
-            Swal.fire({ icon: "error", title: "Update failed" });
+        onError: (error) => {
+            toast.error("Update failed. Please try again.");
         },
     });
 
@@ -90,15 +79,13 @@ export default function Profile() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Validate type
         if (!file.type.startsWith("image/")) {
-            Swal.fire({ icon: "error", title: "Please select an image file" });
+            toast.error("Please select a valid image file (JPEG, PNG, WebP)");
             return;
         }
 
-        // Validate size (max 2MB)
         if (file.size > 2 * 1024 * 1024) {
-            Swal.fire({ icon: "error", title: "Image must be under 2MB" });
+            toast.error("Image must be under 2MB");
             return;
         }
 
