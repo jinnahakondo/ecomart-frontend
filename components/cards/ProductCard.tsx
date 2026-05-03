@@ -64,12 +64,10 @@ export default function ProductCard({ product }: Props) {
 
             {/* Buttons */}
             <div className="flex gap-2 mt-auto">
-                <button className="btn btn-sm btn-primary flex-1 rounded-full gap-1" disabled={product.stock === 0}>
-                    <ShoppingCart size={14} /> Add
-                </button>
-                <Link href={`/products/${product?._id}`} className="btn btn-sm btn-outline flex-1 rounded-full">
-                    Details
+                <Link href={`/products/${product?._id}`} className="btn btn-sm btn-primary flex-1 rounded-full gap-1" >
+                    View Details
                 </Link>
+               
             </div>
         </div>
     );

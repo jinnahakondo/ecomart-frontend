@@ -110,7 +110,7 @@ export default function ProductFilterSidebar() {
                 </div>
 
                 {/* Categories */}
-                <div className="space-y-3">
+                <div className="space-y-3 ">
                     <label className="text-sm font-medium">Categories</label>
 
                     <div className="space-y-2">

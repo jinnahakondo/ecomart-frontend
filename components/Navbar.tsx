@@ -7,6 +7,12 @@ import AuthModal from "./modal/AuthModal";
 import { useRef } from "react";
 import Logo from "./Logo";
 import { toast } from "sonner";
+import dynamic from "next/dynamic";
+
+const ThemeToggle = dynamic(() => import("./ThemeToggle").then(mod => mod.ThemeToggle), {
+    ssr: false,
+    loading: () => <div className="btn btn-ghost btn-circle w-10 h-10" />,
+});
 
 export default function Navbar() {
     const { user, loading, setUser } = useAuth();
@@ -122,6 +128,7 @@ export default function Navbar() {
                 </div>
 
                 <div className="navbar-end gap-2">
+                    <ThemeToggle />
                     {renderAuthSection()}
                 </div>
             </nav>

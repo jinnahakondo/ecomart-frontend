@@ -79,7 +79,6 @@ export default function ProductAddModal({ modalRef }: Props) {
             setValue("description", description, {
                 shouldValidate: true,
             });
-            toast.success("Description generated");
         },
 
         onError: (error: any) => {
