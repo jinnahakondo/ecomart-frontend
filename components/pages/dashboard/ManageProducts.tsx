@@ -152,10 +152,10 @@ export default function ManageProducts() {
                                         </td>
                                         <td>{p.category}</td>
                                         <td>
-                                            <span className="font-semibold">${p.price.toFixed(2)}</span>
+                                            <span className="font-semibold">৳ {p.price.toFixed(2)}</span>
                                             <br />
                                             <span className="text-xs line-through text-base-content/40">
-                                                ${p.oldPrice.toFixed(2)}
+                                                ৳ {p.oldPrice.toFixed(2)}
                                             </span>
                                         </td>
                                         <td>{p.stock}</td>

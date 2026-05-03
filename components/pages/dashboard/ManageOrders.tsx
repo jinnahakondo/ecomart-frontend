@@ -148,8 +148,8 @@ export default function ManageOrders() {
                 subTitle="Track every order, update statuses, and keep the order pipeline moving smoothly."
             />
 
-            <div className="grid gap-4 xl:grid-cols-[1.5fr_0.8fr]">
-                <div className="rounded-3xl bg-base-100 border border-base-200 p-6 shadow-sm">
+            <div className="grid gap-4 ">
+                <div className="rounded-3xl bg-base-100 border border-base-200 p-6 shadow-sm ">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="space-y-2">
                             <p className="text-sm text-base-content/60">Order filter</p>
